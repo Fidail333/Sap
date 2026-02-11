@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "novaview-p1-2",
+    "name": "NovaView P1.2",
+    "category": "Indoor Fine Pitch",
+    "shortDescription": "Ультрадетализированный indoor-экран для премиальных шоурумов, диспетчерских и executive-зон.",
+    "specs": {
+      "pixelPitch": "1.2 mm",
+      "brightness": "1000 nits",
+      "refreshRate": "7680 Hz",
+      "cabinetSize": "600×337.5 mm",
+      "ipRating": "IP31",
+      "viewingAngle": "170°/170°",
+      "power": "≤420 W/m²"
+    },
+    "useCases": ["Boardroom", "Control Room", "Luxury Retail"],
+    "gallery": ["/visuals/products/novaview-p1-2.svg"],
+    "badges": ["HDR", "Fine Pitch"]
+  },
+  {
+    "slug": "novaview-p1-5",
+    "name": "NovaView P1.5",
+    "category": "Indoor Fine Pitch",
+    "shortDescription": "Баланс цены и плотности пикселя для корпоративных пространств и digital art-инсталляций.",
+    "specs": {
+      "pixelPitch": "1.5 mm",
+      "brightness": "900 nits",
+      "refreshRate": "7680 Hz",
+      "cabinetSize": "640×480 mm",
+      "ipRating": "IP31",
+      "viewingAngle": "165°/165°",
+      "power": "≤390 W/m²"
+    },
+    "useCases": ["Experience Center", "Conference", "Retail"],
+    "gallery": ["/visuals/products/novaview-p1-5.svg"],
+    "badges": ["Low Latency", "Energy Smart"]
+  },
+  {
+    "slug": "novaview-p2-5",
+    "name": "NovaView P2.5",
+    "category": "Universal Indoor",
+    "shortDescription": "Серия для переговорных, лобби и образовательных кампусов с высокой надежностью 24/7.",
+    "specs": {
+      "pixelPitch": "2.5 mm",
+      "brightness": "800 nits",
+      "refreshRate": "3840 Hz",
+      "cabinetSize": "640×480 mm",
+      "ipRating": "IP30",
+      "viewingAngle": "160°/160°",
+      "power": "≤340 W/m²"
+    },
+    "useCases": ["Education", "Lobby", "Corporate TV"],
+    "gallery": ["/visuals/products/novaview-p2-5.svg"],
+    "badges": ["24/7", "Cost Efficient"]
+  },
+  {
+    "slug": "ultrabright-outdoor-p4",
+    "name": "UltraBright Outdoor P4",
+    "category": "Outdoor",
+    "shortDescription": "Уличные LED-экраны с высокой яркостью для фасадов, медиафасадов и DOOH-площадок.",
+    "specs": {
+      "pixelPitch": "4 mm",
+      "brightness": "6500 nits",
+      "refreshRate": "3840 Hz",
+      "cabinetSize": "960×960 mm",
+      "ipRating": "IP65 / IP54",
+      "viewingAngle": "140°/140°",
+      "power": "≤720 W/m²"
+    },
+    "useCases": ["DOOH", "Facade", "Transport Hubs"],
+    "gallery": ["/visuals/products/ultrabright-p4.svg"],
+    "badges": ["Outdoor IP65", "Sunlight Ready"]
+  },
+  {
+    "slug": "ultrabright-outdoor-p6",
+    "name": "UltraBright Outdoor P6",
+    "category": "Outdoor",
+    "shortDescription": "Экономичный outdoor-формат для крупных поверхностей, стадионов и дорожных развязок.",
+    "specs": {
+      "pixelPitch": "6 mm",
+      "brightness": "7000 nits",
+      "refreshRate": "3840 Hz",
+      "cabinetSize": "960×960 mm",
+      "ipRating": "IP65 / IP54",
+      "viewingAngle": "140°/120°",
+      "power": "≤690 W/m²"
+    },
+    "useCases": ["Stadium", "Roadside", "City Screen"],
+    "gallery": ["/visuals/products/ultrabright-p6.svg"],
+    "badges": ["Outdoor IP65", "High Brightness"]
+  },
+  {
+    "slug": "rental-xr-p3-9",
+    "name": "Rental XR P3.9",
+    "category": "Rental & Stage",
+    "shortDescription": "Легкие кабинеты для сцен, концертов и XR-съемок с быстрой сборкой и резервированием.",
+    "specs": {
+      "pixelPitch": "3.9 mm",
+      "brightness": "4500 nits",
+      "refreshRate": "7680 Hz",
+      "cabinetSize": "500×500 mm",
+      "ipRating": "IP43",
+      "viewingAngle": "160°/160°",
+      "power": "≤520 W/m²"
+    },
+    "useCases": ["Concert", "Virtual Production", "Exhibition"],
+    "gallery": ["/visuals/products/rental-xr-p3-9.svg"],
+    "badges": ["XR Ready", "Fast Lock"]
+  },
+  {
+    "slug": "cob-pro-0-9",
+    "name": "COB Pro 0.9",
+    "category": "COB Premium",
+    "shortDescription": "COB-панель сверхвысокой контрастности для финансовых центров и mission critical проектов.",
+    "specs": {
+      "pixelPitch": "0.9 mm",
+      "brightness": "1200 nits",
+      "refreshRate": "7680 Hz",
+      "cabinetSize": "600×337.5 mm",
+      "ipRating": "IP54 (front)",
+      "viewingAngle": "170°/170°",
+      "power": "≤450 W/m²"
+    },
+    "useCases": ["SOC", "Broadcast", "Command Center"],
+    "gallery": ["/visuals/products/cob-pro-0-9.svg"],
+    "badges": ["COB", "Anti-Glare", "HDR"]
+  },
+  {
+    "slug": "all-in-one-boardroom-135",
+    "name": "All-in-One Boardroom 135\"",
+    "category": "All-in-One",
+    "shortDescription": "Готовое решение с аудио, контроллером и беспроводным шарингом для переговорных комнат.",
+    "specs": {
+      "pixelPitch": "1.56 mm",
+      "brightness": "700 nits",
+      "refreshRate": "3840 Hz",
+      "cabinetSize": "2990×1680 mm",
+      "ipRating": "IP30",
+      "viewingAngle": "160°/160°",
+      "power": "≤310 W/m²"
+    },
+    "useCases": ["Boardroom", "Training Center", "Government"],
+    "gallery": ["/visuals/products/all-in-one-135.svg"],
+    "badges": ["All-in-One", "Wireless Share"]
+  }
+]

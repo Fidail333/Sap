@@ -1,17 +1,29 @@
-export type Direction = 'SAPPHIRE' | 'MODULES';
-
-export interface CatalogItem {
-  name: string;
-  slug: string;
-  description: string;
-  specs: Record<string, string>;
-  images: string[];
-  source_url: string;
+export interface ProductSpecs {
+  pixelPitch: string;
+  brightness: string;
+  refreshRate: string;
+  cabinetSize: string;
+  ipRating: string;
+  viewingAngle: string;
+  power: string;
 }
 
-export interface Category {
-  name: string;
+export interface ProductItem {
   slug: string;
-  source_url: string;
-  items: CatalogItem[];
+  name: string;
+  category: string;
+  shortDescription: string;
+  specs: ProductSpecs;
+  useCases: string[];
+  gallery: string[];
+  badges: string[];
+}
+
+export interface CaseItem {
+  slug: string;
+  title: string;
+  industry: string;
+  task: string;
+  solution: string;
+  result: string;
 }
