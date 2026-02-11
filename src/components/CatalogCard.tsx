@@ -1,17 +1,11 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import { RequestModal } from './RequestModal';
 import { Badge } from './ui/Badge';
 import { formatAvailabilityLabel, formatPrice, productTechLabel } from '@/lib/product-format';
 import { formatEnvironmentLabel, formatFlexibleLabel } from '@/lib/ui-labels';
 import type { ProductItem } from '@/lib/types';
 
 export function CatalogCard({ item }: { item: ProductItem }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <article className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition hover:-translate-y-1 hover:border-cyan-300/50">
       <Image src={item.image} alt={item.name} width={1200} height={900} className="h-44 w-full object-cover" />
@@ -34,16 +28,14 @@ export function CatalogCard({ item }: { item: ProductItem }) {
         </ul>
         <div className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
           <Link href={`/products/${item.id}`} className="text-cyan-300">Подробнее</Link>
-          <button
-            type="button"
-            className="w-full rounded-xl bg-gradient-to-r from-cyan-300 to-sky-400 px-4 py-2.5 font-medium text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 active:scale-[0.99] sm:w-auto"
-            onClick={() => setOpen(true)}
+          <Link
+            href={{ pathname: '/contacts', query: { product: item.name } }}
+            className="w-full rounded-xl bg-gradient-to-r from-cyan-300 to-sky-400 px-4 py-2.5 text-center font-medium text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 active:scale-[0.99] sm:w-auto"
           >
             Связаться с инженером
-          </button>
+          </Link>
         </div>
       </div>
-      <RequestModal open={open} onClose={() => setOpen(false)} product={{ id: item.id, name: item.name }} />
     </article>
   );
 }

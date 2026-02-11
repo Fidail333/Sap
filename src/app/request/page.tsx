@@ -3,7 +3,7 @@ import { RequestForm } from '@/components/RequestForm';
 import { Section } from '@/components/ui/Section';
 import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = buildMetadata('Связаться с инженером | SAP LED Systems', 'Форма связи с инженером SAP LED Systems.', '/request');
+export const metadata: Metadata = buildMetadata('Связаться с инженером | Sapphire LED', 'Форма связи с инженером Sapphire LED.', '/request');
 
 export default function RequestPage() {
   return (

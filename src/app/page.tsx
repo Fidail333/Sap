@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Section } from '@/components/ui/Section';
 import { casesData, productsData } from '@/lib/content';
+import { blogPosts } from '@/data/blog';
 import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = buildMetadata('Премиальные LED-решения для бизнеса | SAP LED Systems', 'LED-экраны для indoor, outdoor, rental и control rooms с инженерным сопровождением и сервисом.', '/');
+export const metadata: Metadata = buildMetadata('Премиальные LED-решения для бизнеса | Sapphire LED', 'LED-экраны для indoor, outdoor, rental и control rooms с инженерным сопровождением и сервисом.', '/');
 
 const solutions = [
   ['Indoor', 'Fine-pitch панели для переговорных, лобби и шоурумов.'],
@@ -40,7 +41,7 @@ export default function Home() {
             <p className="mt-6 max-w-xl text-slate-300">Проектируем, поставляем и сопровождаем LED-системы полного цикла: от концепции и контента до монтажа и сервисной поддержки.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href="/products">Подобрать экран</Button>
-              <Button href="/request" variant="secondary">Получить КП</Button>
+              <Button href="/contacts">Получить коммерческое предложение</Button>
             </div>
           </Reveal>
           <Reveal>
@@ -74,6 +75,25 @@ export default function Home() {
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">FAQ</h2></Reveal>
         <div className="mt-8 space-y-3">{faq.map(([q,a]) => <Reveal key={q}><details className="rounded-xl border border-white/10 bg-white/[0.03] p-4"><summary className="cursor-pointer font-medium">{q}</summary><p className="mt-3 text-sm text-slate-300">{a}</p></details></Reveal>)}</div>
+      </Section>
+
+
+      <Section>
+        <div className="flex items-end justify-between gap-6">
+          <Reveal><h2 className="text-3xl font-semibold">Новости и статьи</h2></Reveal>
+          <Button href="/blog" variant="secondary">Все материалы</Button>
+        </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {blogPosts.slice(0, 5).map((item) => (
+            <Reveal key={item.slug}>
+              <Card>
+                <p className="text-xs text-cyan-300">{item.type}</p>
+                <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>
+                <Button href={`/blog/${item.slug}`} variant="secondary" className="mt-4">Читать</Button>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
       </Section>
 
       <Section>
