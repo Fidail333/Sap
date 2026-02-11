@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
-import { Button } from '@/components/ui/Button';
+import { ProductContactButton } from '@/components/ProductContactButton';
 import { Section } from '@/components/ui/Section';
 import { getProductBySlug, productsData } from '@/lib/content';
 import { formatAvailabilityLabel, formatPrice, productTechLabel } from '@/lib/product-format';
@@ -27,14 +27,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const attrs: Array<[string, string]> = [
     ['Бренд', product.brand],
     ['Pitch', `P${product.pitch_mm}`],
-    ['Environment', product.environment],
-    ['Flexible', product.is_flexible ? 'Да' : 'Нет'],
-    ['Technology', productTechLabel(product)],
-    ['Refresh', product.refresh_hz ? `${product.refresh_hz} Hz` : '—'],
-    ['Size', product.size_mm ?? '—'],
-    ['Scan', product.scan ?? '—'],
-    ['Thickness', product.thickness_mm ? `${product.thickness_mm} мм` : '—'],
-    ['Chipset', product.chipset ?? '—']
+    ['Среда эксплуатации', product.environment === 'indoor' ? 'Для помещений' : 'Уличный'],
+    ['Исполнение', product.is_flexible ? 'Гибкий' : 'Жёсткий'],
+    ['Технология', productTechLabel(product)],
+    ['Частота обновления', product.refresh_hz ? `${product.refresh_hz} Hz` : '—'],
+    ['Размер', product.size_mm ?? '—'],
+    ['Сканирование', product.scan ?? '—'],
+    ['Толщина', product.thickness_mm ? `${product.thickness_mm} мм` : '—'],
+    ['Чипсет', product.chipset ?? '—']
   ];
 
   return (
@@ -58,7 +58,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </div>
-            <div className="mt-8 flex gap-3"><Button href="/request">Запросить цену</Button><Button href="/contacts" variant="secondary">Связаться с инженером</Button></div>
+            <div className="mt-8"><ProductContactButton productId={product.id} productName={product.name} /></div>
           </div>
         </div>
       </Section>

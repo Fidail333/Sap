@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CatalogCard } from '@/components/CatalogCard';
+import { availabilityLabelMap, environmentLabelMap, flexibleLabelMap } from '@/lib/ui-labels';
 import type { ProductItem } from '@/lib/types';
 
 type SortMode = 'price_asc' | 'price_desc' | 'pitch_asc' | 'name_asc';
@@ -16,6 +17,13 @@ function listToParam(values: Set<string>) {
   return Array.from(values).sort().join(',');
 }
 
+function translateFilterValue(group: string, value: string) {
+  if (group === 'env') return environmentLabelMap[value as keyof typeof environmentLabelMap] ?? value;
+  if (group === 'flex') return flexibleLabelMap[value as keyof typeof flexibleLabelMap] ?? value;
+  if (group === 'availability') return availabilityLabelMap[value as keyof typeof availabilityLabelMap] ?? value;
+  return value;
+}
+
 function FilterGroup({ title, values, selected, keyName, onChange }: { title: string; values: string[]; selected: Set<string>; keyName: string; onChange: (key: string, value: string, checked: boolean) => void }) {
   return (
     <fieldset className="rounded-xl border border-white/10 p-4">
@@ -24,7 +32,7 @@ function FilterGroup({ title, values, selected, keyName, onChange }: { title: st
         {values.map((value) => (
           <label key={value} className="inline-flex items-center gap-2 text-slate-200">
             <input type="checkbox" checked={selected.has(value)} onChange={(event) => onChange(keyName, value, event.target.checked)} />
-            {value}
+            {translateFilterValue(keyName, value)}
           </label>
         ))}
       </div>
@@ -100,25 +108,28 @@ export function ProductsCatalog({ products }: { products: ProductItem[] }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
       <aside className="space-y-4">
-        <FilterGroup title="Environment" values={['indoor', 'outdoor']} selected={selectedEnvironment} keyName="env" onChange={setParamValue} />
+        <FilterGroup title="Среда эксплуатации" values={['indoor', 'outdoor']} selected={selectedEnvironment} keyName="env" onChange={setParamValue} />
         <FilterGroup title="Шаг пикселя" values={facets.pitch} selected={selectedPitch} keyName="pitch" onChange={setParamValue} />
-        <FilterGroup title="Flexible" values={['yes', 'no']} selected={selectedFlexible} keyName="flex" onChange={setParamValue} />
-        <FilterGroup title="Technology" values={facets.tech} selected={selectedTech} keyName="tech" onChange={setParamValue} />
-        <FilterGroup title="Refresh rate" values={facets.refresh} selected={selectedRefresh} keyName="refresh" onChange={setParamValue} />
-        <FilterGroup title="Size" values={facets.size} selected={selectedSize} keyName="size" onChange={setParamValue} />
-        <FilterGroup title="Availability" values={['in_stock', 'preorder']} selected={selectedAvailability} keyName="availability" onChange={setParamValue} />
-        <FilterGroup title="Badges" values={facets.badges} selected={selectedBadges} keyName="badges" onChange={setParamValue} />
+        <FilterGroup title="Исполнение" values={['yes', 'no']} selected={selectedFlexible} keyName="flex" onChange={setParamValue} />
+        <FilterGroup title="Технология" values={facets.tech} selected={selectedTech} keyName="tech" onChange={setParamValue} />
+        <FilterGroup title="Частота обновления" values={facets.refresh} selected={selectedRefresh} keyName="refresh" onChange={setParamValue} />
+        <FilterGroup title="Размер" values={facets.size} selected={selectedSize} keyName="size" onChange={setParamValue} />
+        <FilterGroup title="Наличие" values={['in_stock', 'preorder']} selected={selectedAvailability} keyName="availability" onChange={setParamValue} />
+        <FilterGroup title="Метки" values={facets.badges} selected={selectedBadges} keyName="badges" onChange={setParamValue} />
         <button onClick={resetFilters} className="w-full rounded-xl border border-white/20 px-4 py-3 text-sm">Сбросить фильтры</button>
       </aside>
       <div>
         <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
           <p className="text-sm text-slate-300">Найдено: {filtered.length}</p>
-          <select value={sortMode} onChange={(event) => setSort(event.target.value as SortMode)} className="rounded-lg border border-white/20 bg-slate-900 px-3 py-2 text-sm">
-            <option value="name_asc">По названию</option>
-            <option value="pitch_asc">По шагу пикселя</option>
-            <option value="price_asc">Цена: по возрастанию</option>
-            <option value="price_desc">Цена: по убыванию</option>
-          </select>
+          <label className="flex items-center gap-2 text-sm text-slate-300">
+            <span>Сортировка</span>
+            <select value={sortMode} onChange={(event) => setSort(event.target.value as SortMode)} className="rounded-lg border border-white/20 bg-slate-900 px-3 py-2 text-sm">
+              <option value="pitch_asc">По шагу пикселя</option>
+              <option value="price_asc">По цене: по возрастанию</option>
+              <option value="price_desc">По цене: по убыванию</option>
+              <option value="name_asc">По названию</option>
+            </select>
+          </label>
         </div>
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filtered.map((item) => <CatalogCard key={item.id} item={item} />)}

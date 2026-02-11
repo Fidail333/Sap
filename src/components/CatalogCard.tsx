@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { RequestModal } from './RequestModal';
 import { Badge } from './ui/Badge';
 import { formatAvailabilityLabel, formatPrice, productTechLabel } from '@/lib/product-format';
+import { formatEnvironmentLabel, formatFlexibleLabel } from '@/lib/ui-labels';
 import type { ProductItem } from '@/lib/types';
 
 export function CatalogCard({ item }: { item: ProductItem }) {
@@ -22,21 +23,27 @@ export function CatalogCard({ item }: { item: ProductItem }) {
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-200">
           <span className="rounded-full border border-emerald-400/40 px-2 py-1 text-emerald-300">{formatAvailabilityLabel(item.availability)}</span>
           <span className="rounded-full border border-white/20 px-2 py-1">P{item.pitch_mm}</span>
-          <span className="rounded-full border border-white/20 px-2 py-1">{item.environment}</span>
-          <span className="rounded-full border border-white/20 px-2 py-1">{item.is_flexible ? 'Flexible' : 'Rigid'}</span>
+          <span className="rounded-full border border-white/20 px-2 py-1">{formatEnvironmentLabel(item.environment)}</span>
+          <span className="rounded-full border border-white/20 px-2 py-1">{formatFlexibleLabel(item.is_flexible)}</span>
         </div>
         <ul className="grid grid-cols-2 gap-2 text-xs text-slate-300">
-          <li>Tech: {productTechLabel(item)}</li>
-          <li>Refresh: {item.refresh_hz ?? '—'} Hz</li>
-          <li>Size: {item.size_mm ?? '—'}</li>
-          <li>Scan: {item.scan ?? '—'}</li>
+          <li>Технология: {productTechLabel(item)}</li>
+          <li>Частота: {item.refresh_hz ?? '—'} Hz</li>
+          <li>Размер: {item.size_mm ?? '—'}</li>
+          <li>Сканирование: {item.scan ?? '—'}</li>
         </ul>
-        <div className="flex gap-4 text-sm">
+        <div className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
           <Link href={`/products/${item.id}`} className="text-cyan-300">Подробнее</Link>
-          <button className="text-slate-100" onClick={() => setOpen(true)}>Запросить цену</button>
+          <button
+            type="button"
+            className="w-full rounded-xl bg-gradient-to-r from-cyan-300 to-sky-400 px-4 py-2.5 font-medium text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 active:scale-[0.99] sm:w-auto"
+            onClick={() => setOpen(true)}
+          >
+            Связаться с инженером
+          </button>
         </div>
       </div>
-      <RequestModal open={open} onClose={() => setOpen(false)} product={item.name} />
+      <RequestModal open={open} onClose={() => setOpen(false)} product={{ id: item.id, name: item.name }} />
     </article>
   );
 }
