@@ -24,7 +24,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link href="/request" className="rounded-lg border border-cyan-300/40 bg-cyan-300/10 px-4 py-2 text-cyan-100 transition hover:bg-cyan-300/20">Оставить заявку</Link>
+          <Link href="/contacts" className="rounded-lg border border-cyan-300/40 bg-cyan-300/10 px-4 py-2 text-cyan-100 transition hover:bg-cyan-300/20">Связаться с инженером</Link>
         </nav>
       </div>
     </header>

@@ -6,7 +6,7 @@ const quickLinks = [
   { href: '/cases', label: 'Кейсы' },
   { href: '/about', label: 'О компании' },
   { href: '/contacts', label: 'Контакты' },
-  { href: '/request', label: 'Заявка' }
+  { href: '/privacy', label: 'Политика обработки персональных данных' }
 ] as const;
 
 export function Footer() {
