@@ -1,15 +1,14 @@
-import modules from '../../content/modules.json';
-import sapphire from '../../content/sapphire.json';
+import products from '../../content/products.json';
+import casesList from '../../content/cases.json';
+import type { CaseItem, ProductItem } from './types';
 
-export const modulesData = modules;
-export const sapphireData = sapphire;
+export const productsData = products as ProductItem[];
+export const casesData = casesList as CaseItem[];
 
-export function getAllModuleItems() {
-  return modulesData.categories.flatMap((category) =>
-    category.items.map((item) => ({ ...item, category: category.slug, categoryName: category.name }))
-  );
+export function getProductBySlug(slug: string) {
+  return productsData.find((item) => item.slug === slug);
 }
 
-export function getModuleBySlug(slug: string) {
-  return getAllModuleItems().find((item) => item.slug === slug);
+export function getProductCategories() {
+  return Array.from(new Set(productsData.map((item) => item.category)));
 }

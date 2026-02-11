@@ -6,8 +6,8 @@ import { JsonLd } from '@/components/JsonLd';
 import { buildMetadata, orgSchema } from '@/lib/seo';
 
 export const metadata: Metadata = buildMetadata(
-  'Sapphire + LED Modules',
-  'Единая витрина решений Sapphire и комплектующих LED Modules.',
+  'SAP LED Systems — премиальные LED-экраны для B2B',
+  'Проектирование, поставка, монтаж и сервис LED-экранов для indoor, outdoor, rental и корпоративных пространств.',
   '/'
 );
 

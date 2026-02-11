@@ -1,16 +1,16 @@
 import type { MetadataRoute } from 'next';
-import { getAllModuleItems } from '@/lib/content';
+import { productsData } from '@/lib/content';
 
 const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ['', '/sapphire', '/modules', '/about', '/contacts', '/request'];
-  const productRoutes = getAllModuleItems().map((item) => `/modules/${item.slug}`);
+  const staticRoutes = ['', '/products', '/cases', '/about', '/contacts', '/request'];
+  const productRoutes = productsData.map((item) => `/products/${item.slug}`);
 
   return [...staticRoutes, ...productRoutes].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
-    priority: path === '' ? 1 : 0.7
+    priority: path === '' ? 1 : 0.75
   }));
 }
