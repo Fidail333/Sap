@@ -111,17 +111,17 @@ export default function Home() {
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <Reveal>
             <Badge>Premium LED integrator</Badge>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight md:text-6xl">Инженерные LED-экраны для брендов, инфраструктуры и корпоративных пространств.</h1>
-            <p className="mt-6 max-w-xl text-slate-300">Проектируем, поставляем и сопровождаем LED-системы полного цикла: от концепции и контента до монтажа и сервисной поддержки.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl md:text-6xl">Инженерные LED-экраны для брендов, инфраструктуры и корпоративных пространств.</h1>
+            <p className="mt-4 max-w-xl text-slate-300">Проектируем, поставляем и сопровождаем LED-системы полного цикла: от концепции и контента до монтажа и сервисной поддержки.</p>
+            <div className="mt-6 flex flex-wrap gap-3">
               <Button href="/products">Подобрать экран</Button>
               <Button href="/contacts">Получить коммерческое предложение</Button>
             </div>
           </Reveal>
           <Reveal>
-            <div className="scanline relative h-[300px] overflow-hidden rounded-3xl border border-cyan-200/20 bg-slate-900/70 md:h-[420px]">
-              <Image src="/visuals/hero-led-wall.svg" alt="LED media wall" fill className="object-cover object-center" priority />
-              <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/45 to-cyan-900/30" />
+            <div className="scanline relative min-h-[440px] overflow-hidden rounded-3xl border border-cyan-200/20 bg-slate-900/70 sm:min-h-[500px] md:min-h-[420px]">
+              <Image src="/visuals/photo_2026-02-11_17-22-55.jpg" alt="Фоновое изображение LED-экрана" fill className="object-cover object-center" priority />
+              <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/80 via-slate-950/35 to-cyan-900/20" />
             </div>
           </Reveal>
         </div>
@@ -129,16 +129,16 @@ export default function Home() {
 
       <Section id="solutions">
         <Reveal><h2 className="text-3xl font-semibold">Решения</h2></Reveal>
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">
           {solutions.map((item) => (
             <Reveal key={item.title}>
-              <Card className="overflow-hidden p-0">
+              <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-44 w-full">
                   <Image src={item.image} alt={item.title} fill className="object-cover" />
                 </div>
-                <div className="p-5">
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-300">{item.text}</p>
+                <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
+                  <h3 className="break-words text-lg font-semibold leading-tight">{item.title}</h3>
+                  <p className="line-clamp-3 break-words text-sm leading-relaxed text-slate-300">{item.text}</p>
                 </div>
               </Card>
             </Reveal>
@@ -148,7 +148,7 @@ export default function Home() {
 
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">Преимущества</h2></Reveal>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-3">
           {advantages.map((item) => (
             <Reveal key={item.title}>
               <Card>
@@ -163,17 +163,17 @@ export default function Home() {
 
       <Section>
         <div className="flex items-end justify-between gap-6"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/products" variant="secondary">Весь каталог</Button></div>
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0, 6).map((item) => <Reveal key={item.id}><CatalogCard item={item} /></Reveal>)}</div>
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0, 6).map((item) => <Reveal key={item.id}><CatalogCard item={item} /></Reveal>)}</div>
       </Section>
 
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">Процесс работы</h2></Reveal>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{process.map((item, index) => <Reveal key={item}><Card><p className="text-cyan-300">0{index + 1}</p><p className="mt-2 text-sm text-slate-300">{item}</p></Card></Reveal>)}</div>
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-4">{process.map((item, index) => <Reveal key={item}><Card><p className="text-cyan-300">0{index + 1}</p><p className="mt-2 text-sm text-slate-300">{item}</p></Card></Reveal>)}</div>
       </Section>
 
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">FAQ</h2></Reveal>
-        <div className="mt-8 space-y-3">{faq.map(([q, a]) => <Reveal key={q}><details className="rounded-xl border border-white/10 bg-white/[0.03] p-4"><summary className="cursor-pointer font-medium">{q}</summary><p className="mt-3 text-sm leading-relaxed text-slate-300">{a}</p></details></Reveal>)}</div>
+        <div className="mt-6 space-y-3 md:mt-8">{faq.map(([q, a]) => <Reveal key={q}><details className="rounded-xl border border-white/10 bg-white/[0.03] p-4"><summary className="cursor-pointer font-medium">{q}</summary><p className="mt-3 text-sm leading-relaxed text-slate-300">{a}</p></details></Reveal>)}</div>
       </Section>
 
       <Section>
@@ -181,14 +181,14 @@ export default function Home() {
           <Reveal><h2 className="text-3xl font-semibold">Новости и статьи</h2></Reveal>
           <Button href="/blog" variant="secondary">Все материалы</Button>
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">
           {blogPosts.slice(0, 6).map((item) => (
             <Reveal key={item.slug}>
-              <Card className="overflow-hidden p-0">
+              <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-40 w-full">
                   <Image src={item.image} alt={item.title} fill className="object-cover" />
                 </div>
-                <div className="p-5">
+                <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
                   <p className="text-xs text-cyan-300">{item.type}</p>
                   <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm text-slate-300">{item.excerpt}</p>
@@ -202,10 +202,10 @@ export default function Home() {
 
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">Недавние кейсы</h2></Reveal>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-4">
           {recentCases.map((item) => (
             <Reveal key={item.title}>
-              <Card className="overflow-hidden p-0">
+              <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-36 w-full">
                   <Image src={item.image} alt={item.title} fill className="object-cover" />
                 </div>
