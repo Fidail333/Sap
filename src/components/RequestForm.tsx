@@ -34,7 +34,7 @@ export function RequestForm({ initialProduct = '', onSuccess, redirectOnSuccess 
       </div>
       <select name="product" defaultValue={initialProduct} className="rounded-xl border border-white/15 bg-slate-900 px-4 py-3">
         <option value="">Интересующий продукт</option>
-        {productsData.map((item) => <option key={item.slug} value={item.name}>{item.name}</option>)}
+        {productsData.map((item) => <option key={item.id} value={item.name}>{item.name}</option>)}
       </select>
       <textarea name="comment" rows={4} placeholder="Комментарий" className="rounded-xl border border-white/15 bg-slate-900 px-4 py-3" />
       <label className="flex items-start gap-2 text-sm text-slate-300"><input name="consent" required type="checkbox" className="mt-1" />Согласен на обработку персональных данных.</label>
