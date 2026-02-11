@@ -14,7 +14,7 @@ export default function ContactsPage({ searchParams }: { searchParams?: { produc
   return (
     <main>
       <Section>
-        <h1 className="text-4xl font-semibold">Контакты</h1>
+        <h1 className="text-3xl font-semibold sm:text-4xl">Контакты</h1>
 
         {product ? (
           <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-cyan-300/30 bg-cyan-300/10 px-4 py-3 text-sm text-cyan-100">
@@ -23,7 +23,7 @@ export default function ContactsPage({ searchParams }: { searchParams?: { produc
           </div>
         ) : null}
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        <div className="mt-6 grid gap-6 md:mt-8 md:gap-8 lg:grid-cols-2">
           <div className="grid gap-4">
             <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <p className="text-sm text-slate-400">Адрес</p>
@@ -44,7 +44,7 @@ export default function ContactsPage({ searchParams }: { searchParams?: { produc
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-900/50 p-3 shadow-xl shadow-cyan-950/30">
-            <iframe src={mapUrl} width="100%" height="420" loading="lazy" className="rounded-xl" title="Карта офиса Sapphire LED" />
+            <iframe src={mapUrl} width="100%" height="420" loading="lazy" className="h-[320px] w-full rounded-xl sm:h-[420px]" title="Карта офиса Sapphire LED" />
             <a
               href={`https://yandex.ru/maps/?text=${encodeURIComponent(address)}`}
               target="_blank"

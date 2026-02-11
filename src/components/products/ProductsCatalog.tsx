@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CatalogCard } from '@/components/CatalogCard';
 import { availabilityLabelMap, environmentLabelMap, flexibleLabelMap } from '@/lib/ui-labels';
@@ -44,11 +44,11 @@ function FilterGroup({ title, values, selected, keyName, onChange }: { title: st
 
 function CatalogTypeSelector({ selected, onSelect }: { selected: CatalogType; onSelect: (value: CatalogType) => void }) {
   return (
-    <div className="inline-flex rounded-xl border border-white/15 bg-slate-900/70 p-1">
-      <button onClick={() => onSelect('modules')} className={`rounded-lg px-3 py-2 text-sm transition ${selected === 'modules' ? 'bg-cyan-300 text-slate-900' : 'text-slate-300 hover:text-white'}`}>
+    <div className="inline-flex w-full flex-col rounded-xl border border-white/15 bg-slate-900/70 p-1 sm:w-auto sm:flex-row">
+      <button onClick={() => onSelect('modules')} className={`rounded-lg px-3 py-2 text-left text-sm transition sm:text-center ${selected === 'modules' ? 'bg-cyan-300 text-slate-900' : 'text-slate-300 hover:text-white'}`}>
         LED модули (Meiyad)
       </button>
-      <button onClick={() => onSelect('displays')} className={`rounded-lg px-3 py-2 text-sm transition ${selected === 'displays' ? 'bg-cyan-300 text-slate-900' : 'text-slate-300 hover:text-white'}`}>
+      <button onClick={() => onSelect('displays')} className={`rounded-lg px-3 py-2 text-left text-sm transition sm:text-center ${selected === 'displays' ? 'bg-cyan-300 text-slate-900' : 'text-slate-300 hover:text-white'}`}>
         LED экраны SAPPHIRE (SCIH/SCA)
       </button>
     </div>
@@ -78,6 +78,7 @@ export function ProductsCatalog({ modules, displays }: { modules: ModuleProductI
   const selectedScreenResolution = parseList(searchParams.get('screen_resolution'));
 
   const sortMode = (searchParams.get('sort') as SortMode | null) ?? 'name_asc';
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   const moduleFacets = useMemo(() => ({
     pitch: Array.from(new Set(modules.map((item) => String(item.pitch_mm)))).sort((a, b) => Number(a) - Number(b)),
@@ -170,7 +171,14 @@ export function ProductsCatalog({ modules, displays }: { modules: ModuleProductI
     <div className="space-y-6">
       <CatalogTypeSelector selected={catalogType} onSelect={setCatalogType} />
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-        <aside className="space-y-4">
+        <button
+          type="button"
+          onClick={() => setMobileFilterOpen((value) => !value)}
+          className="rounded-xl border border-white/20 px-4 py-3 text-left text-sm text-slate-200 lg:hidden"
+        >
+          {mobileFilterOpen ? 'Скрыть фильтры' : 'Показать фильтры'}
+        </button>
+        <aside className={`space-y-4 ${mobileFilterOpen ? 'block' : 'hidden'} lg:block`}>
           {catalogType === 'modules' ? (
             <>
               <FilterGroup title="Среда эксплуатации" values={['indoor', 'outdoor']} selected={selectedEnvironment} keyName="env" onChange={setParamValue} />
@@ -213,7 +221,7 @@ export function ProductsCatalog({ modules, displays }: { modules: ModuleProductI
               </select>
             </label>
           </div>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filtered.map((item) => <CatalogCard key={item.id} item={item} />)}
           </div>
         </div>

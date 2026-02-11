@@ -11,7 +11,7 @@ const quickLinks = [
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-white/10 bg-slate-950 py-10 text-sm text-slate-400">
+    <footer className="mt-12 border-t border-white/10 bg-slate-950 py-10 md:mt-16 text-sm text-slate-400">
       <Container className="grid gap-8 md:grid-cols-3">
         <div>
           <Link href="/" className="inline-flex items-center" aria-label="Sapphire LED — главная страница">

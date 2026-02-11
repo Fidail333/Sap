@@ -9,10 +9,10 @@ export default function CasesPage() {
   return (
     <main>
       <Section>
-        <h1 className="text-4xl font-semibold">Кейсы</h1>
+        <h1 className="text-3xl font-semibold sm:text-4xl">Кейсы</h1>
         <p className="mt-4 max-w-3xl text-slate-300">Примеры проектов с измеримым бизнес-эффектом.</p>
-        <div className="mt-10 grid gap-5 md:grid-cols-2">{casesData.map((item) => (
-          <article key={item.slug} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2">{casesData.map((item) => (
+          <article key={item.slug} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:p-6">
             <p className="text-xs uppercase tracking-wider text-cyan-300">{item.industry}</p>
             <h2 className="mt-2 text-xl font-semibold">{item.title}</h2>
             <p className="mt-4 text-sm text-slate-400">Задача</p><p className="text-sm text-slate-300">{item.task}</p>
