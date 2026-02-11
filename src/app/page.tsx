@@ -63,7 +63,7 @@ export default function Home() {
 
       <Section>
         <div className="flex items-end justify-between gap-6"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/products" variant="secondary">Весь каталог</Button></div>
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0,6).map((item) => <Reveal key={item.slug}><CatalogCard item={item} /></Reveal>)}</div>
+        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0,6).map((item) => <Reveal key={item.id}><CatalogCard item={item} /></Reveal>)}</div>
       </Section>
 
       <Section>
