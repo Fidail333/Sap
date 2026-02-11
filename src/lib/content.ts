@@ -1,8 +1,20 @@
-import productsCollection from '../../content/custom/products.json';
+import catalogCollection from '../../content/custom/catalog.json';
 import casesList from '../../content/cases.json';
-import type { CaseItem, ProductCollection, ProductItem } from './types';
+import type { CaseItem, CatalogCollection, CatalogProductItem, DisplayProductItem, ModuleProductItem } from './types';
 
-export const productsData = (productsCollection as ProductCollection).products;
+const catalog = catalogCollection as CatalogCollection;
+
+export const moduleProductsData: ModuleProductItem[] = catalog.modules.map((item) => ({
+  ...item,
+  catalog_type: 'modules'
+}));
+
+export const displayProductsData: DisplayProductItem[] = catalog.displays.map((item) => ({
+  ...item,
+  catalog_type: 'displays'
+}));
+
+export const productsData: CatalogProductItem[] = [...moduleProductsData, ...displayProductsData];
 export const casesData = casesList as CaseItem[];
 
 export function getProductBySlug(slug: string) {
@@ -10,5 +22,5 @@ export function getProductBySlug(slug: string) {
 }
 
 export function getProductCategories() {
-  return Array.from(new Set(productsData.map((item) => `${item.environment} • P${item.pitch_mm}`)));
+  return Array.from(new Set(moduleProductsData.map((item) => `${item.environment} • P${item.pitch_mm}`)));
 }

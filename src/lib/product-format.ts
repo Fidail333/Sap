@@ -1,4 +1,4 @@
-import type { ProductAvailability, ProductItem } from './types';
+import type { CatalogProductItem, ProductAvailability } from './types';
 import { availabilityLabelMap } from './ui-labels';
 
 const priceFormatter = new Intl.NumberFormat('ru-RU', {
@@ -16,6 +16,7 @@ export function formatAvailabilityLabel(status: ProductAvailability) {
   return availabilityLabelMap[status];
 }
 
-export function productTechLabel(product: ProductItem) {
-  return product.tech.join(' / ');
+export function productTechLabel(product: CatalogProductItem) {
+  if (product.catalog_type === 'modules') return product.tech.join(' / ');
+  return product.pixel_type;
 }
