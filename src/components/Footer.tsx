@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from './ui/Container';
 
@@ -13,10 +14,9 @@ export function Footer() {
     <footer className="mt-20 border-t border-white/10 bg-slate-950 py-10 text-sm text-slate-400">
       <Container className="grid gap-8 md:grid-cols-3">
         <div>
-          <div className="inline-flex items-center gap-2">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-cyan-300/40 bg-cyan-300/10 text-[10px] font-bold text-cyan-200">SL</span>
-            <p className="text-base font-semibold text-white">Sapphire LED</p>
-          </div>
+          <Link href="/" className="inline-flex items-center" aria-label="Sapphire LED — главная страница">
+            <Image src="/visuals/logo.svg" alt="Sapphire LED" width={158} height={36} className="h-8 w-auto" />
+          </Link>
           <p className="mt-3">Поставка LED-модулей и комплектующих для экранов с инженерной поддержкой и надежной логистикой.</p>
         </div>
         <div>

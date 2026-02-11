@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -18,9 +19,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-3 lg:px-10">
-        <Link href="/" className="inline-flex items-center gap-3 text-lg font-semibold tracking-wide text-white">
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-cyan-300/40 bg-cyan-300/10 text-xs font-bold text-cyan-200">SL</span>
-          <span>Sapphire LED</span>
+        <Link href="/" className="inline-flex items-center" aria-label="Sapphire LED — главная страница">
+          <Image src="/visuals/logo.svg" alt="Sapphire LED" width={220} height={50} className="h-10 w-auto" priority />
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm md:flex">

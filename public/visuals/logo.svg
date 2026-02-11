@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 140" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Sapphire LED logo</title>
+  <desc id="logoDesc">Sapphire crystal icon with glowing LED node and text Sapphire LED.</desc>
+  <defs>
+    <linearGradient id="crystalFill" x1="64" y1="14" x2="64" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8be8ff"/>
+      <stop offset="0.52" stop-color="#2f98ff"/>
+      <stop offset="1" stop-color="#0a3a8f"/>
+    </linearGradient>
+    <linearGradient id="textFill" x1="168" y1="48" x2="510" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#eff9ff"/>
+      <stop offset="1" stop-color="#96e5ff"/>
+    </linearGradient>
+    <linearGradient id="ledFill" x1="517" y1="72" x2="592" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#62d5ff"/>
+      <stop offset="1" stop-color="#20b2ff"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="translate(16 14)">
+    <path d="M48 2 92 18 110 56 92 94 48 110 4 94-14 56 4 18Z" fill="url(#crystalFill)" opacity=".18" filter="url(#glow)"/>
+    <path d="M48 6 90 22 104 56 90 90 48 106 6 90-8 56 6 22Z" fill="none" stroke="#8de8ff" stroke-width="2"/>
+    <path d="M48 6v100M6 22h84M-8 56h112M6 90h84M48 6 6 90M48 6 90 90M48 106 6 22M48 106 90 22" stroke="#7fd9ff" stroke-opacity=".45" stroke-width="1"/>
+    <circle cx="48" cy="56" r="8" fill="#c7f4ff" filter="url(#glow)"/>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial,sans-serif" letter-spacing=".6">
+    <text x="166" y="76" font-size="50" font-weight="700" fill="url(#textFill)">Sapphire</text>
+    <text x="518" y="76" font-size="32" font-weight="700" fill="url(#ledFill)">LED</text>
+    <rect x="519" y="83" width="72" height="2" rx="1" fill="#3ac7ff" opacity=".65"/>
+  </g>
+</svg>
