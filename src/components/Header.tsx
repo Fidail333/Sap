@@ -13,6 +13,14 @@ const nav = [
   { href: '/blog', label: 'Материалы' }
 ] as const;
 
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-cyan-100" aria-hidden="true">
+      <path d="M21 16.5V20a1 1 0 0 1-1.1 1A18.9 18.9 0 0 1 11.7 18a18.6 18.6 0 0 1-5.8-5.8A18.9 18.9 0 0 1 3 4.1 1 1 0 0 1 4 3h3.5a1 1 0 0 1 1 .9c.1.9.4 1.8.7 2.7a1 1 0 0 1-.2 1l-1.5 1.5a16 16 0 0 0 6.9 6.9l1.5-1.5a1 1 0 0 1 1-.2c.9.3 1.8.6 2.7.7a1 1 0 0 1 .9 1Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
 
@@ -41,7 +49,7 @@ export function Header() {
           aria-label="Позвонить в Sapphire LED"
         >
           <p className="inline-flex items-center gap-2 text-sm font-medium text-cyan-100">
-            <span aria-hidden="true">📞</span>
+            <PhoneIcon />
             +7-903-110-84-67
           </p>
           <p className="text-[11px] text-slate-300">Пн–Пт 9:00–18:00</p>

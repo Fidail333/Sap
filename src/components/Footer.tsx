@@ -20,7 +20,7 @@ export function Footer() {
           <p className="mt-3">Поставка LED-модулей и комплектующих для экранов с инженерной поддержкой и надежной логистикой.</p>
         </div>
         <div>
-          <p className="font-medium text-slate-100">Ссылки</p>
+          <p className="font-medium text-slate-100">Навигация</p>
           <ul className="mt-3 space-y-2">
             {quickLinks.map((item) => (
               <li key={item.href}>

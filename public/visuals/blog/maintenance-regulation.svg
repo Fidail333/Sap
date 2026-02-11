@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" role="img" aria-label="Регламент обслуживания">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#020617"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b122b"/><stop offset="55%" stop-color="#1d4ed8" stop-opacity="0.35"/><stop offset="100%" stop-color="#020617"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="70%"><stop offset="0%" stop-color="#22d3ee" stop-opacity="0.7"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.05"/></radialGradient>
+  </defs>
+  <rect width="560" height="360" rx="20" fill="url(#bg)"/>
+  <path d="M60 240 C130 140 210 290 285 190 C355 95 440 260 520 155" stroke="#22d3ee" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.9"/><path d="M50 275 C145 175 222 318 302 220 C390 120 460 300 540 190" stroke="#60a5fa" stroke-width="7" fill="none" opacity="0.7"/>
+  <rect x="0" y="0" width="560" height="360" fill="url(#scan)" opacity="0.12"/>
+  <defs><pattern id="scan" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="1" fill="#38bdf8"/></pattern></defs>
+  <text x="28" y="326" fill="#e2e8f0" font-size="22" font-family="Inter,Arial,sans-serif">Регламент обслуживания</text>
+  <text x="28" y="346" fill="#94a3b8" font-size="14" font-family="Inter,Arial,sans-serif">Indoor и outdoor сервис</text>
+</svg>
