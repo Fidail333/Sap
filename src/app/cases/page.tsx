@@ -3,7 +3,7 @@ import { Section } from '@/components/ui/Section';
 import { casesData } from '@/lib/content';
 import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = buildMetadata('Кейсы внедрения LED-экранов | SAP LED Systems', 'Портфолио реализованных проектов: транспорт, финансы, спорт, ритейл и медиа.', '/cases');
+export const metadata: Metadata = buildMetadata('Кейсы внедрения LED-экранов | Sapphire LED', 'Портфолио реализованных проектов: транспорт, финансы, спорт, ритейл и медиа.', '/cases');
 
 export default function CasesPage() {
   return (

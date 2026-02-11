@@ -5,13 +5,13 @@ import { ProductsCatalog } from '@/components/products/ProductsCatalog';
 import { productsData } from '@/lib/content';
 import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = buildMetadata('Каталог LED-экранов Meiyad | SAP LED Systems', 'Каталог Meiyad: indoor/outdoor модули, фильтры по шагу пикселя, технологии, размеру и наличию.', '/products');
+export const metadata: Metadata = buildMetadata('Каталог LED-модулей | Sapphire LED', 'Каталог: indoor/outdoor модули, фильтры по шагу пикселя, технологии, размеру и наличию.', '/products');
 
 export default function ProductsPage() {
   return (
     <main>
       <Section className="pb-8">
-        <h1 className="text-4xl font-semibold">Каталог Meiyad</h1>
+        <h1 className="text-4xl font-semibold">Каталог</h1>
         <p className="mt-4 max-w-3xl text-slate-300">Подберите LED-модули по среде эксплуатации, шагу пикселя, технологии и цене.</p>
       </Section>
       <Section className="pt-0">

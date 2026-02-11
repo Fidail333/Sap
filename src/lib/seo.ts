@@ -13,7 +13,7 @@ export function buildMetadata(title: string, description: string, path = ''): Me
       title,
       description,
       url,
-      siteName: 'SAP LED Systems',
+      siteName: 'Sapphire LED',
       type: 'website',
       locale: 'ru_RU',
       images: [{ url: '/visuals/hero-led-wall.svg', width: 1400, height: 900 }]
@@ -25,18 +25,18 @@ export function buildMetadata(title: string, description: string, path = ''): Me
 export const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'SAP LED Systems',
+  name: 'Sapphire LED',
   url: siteUrl,
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Москва',
-    streetAddress: 'Ленинградский пр-т, 37к3'
+    streetAddress: 'ул Горбунова, д. 2, стр. 3, Помещ. 18/8'
   },
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'sales',
-    telephone: '+7-495-145-88-40',
-    email: 'sales@sap-led.ru'
+    telephone: '+7-903-110-84-67',
+    email: 'mail@led-modules.ru'
   }
 };
 
@@ -46,7 +46,7 @@ export function productSchema(name: string, description: string, slug: string) {
     '@type': 'Product',
     name,
     description,
-    brand: { '@type': 'Brand', name: 'SAP LED Systems' },
+    brand: { '@type': 'Brand', name: 'Sapphire LED' },
     url: `${siteUrl}/products/${slug}`
   };
 }

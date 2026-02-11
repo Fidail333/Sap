@@ -15,8 +15,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = getProductBySlug(slug);
-  if (!product) return buildMetadata('Продукт не найден | SAP LED Systems', 'Страница продукта не найдена.', '/products');
-  return buildMetadata(`${product.name} | SAP LED Systems`, product.short_description, `/products/${product.id}`);
+  if (!product) return buildMetadata('Продукт не найден | Sapphire LED', 'Страница продукта не найдена.', '/products');
+  return buildMetadata(`${product.name} | Sapphire LED`, product.short_description, `/products/${product.id}`);
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -58,7 +58,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </div>
-            <div className="mt-8"><ProductContactButton productId={product.id} productName={product.name} /></div>
+            <div className="mt-8"><ProductContactButton productName={product.name} /></div>
           </div>
         </div>
       </Section>
