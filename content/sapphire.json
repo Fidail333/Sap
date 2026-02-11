@@ -1,0 +1,25 @@
+{
+  "title": "Sapphire LED",
+  "source_url": "https://sapphire-led.com/",
+  "advantages": [
+    "Надежные решения для промышленного освещения",
+    "Стабильные поставки и инженерная поддержка"
+  ],
+  "series": [
+    {
+      "name": "Sapphire Street Pro",
+      "slug": "sapphire-street-pro",
+      "description": "Серия светильников для улиц и магистралей.",
+      "specs": {
+        "Мощность": "50-240W",
+        "Срок службы": "100 000 ч"
+      },
+      "images": [],
+      "source_url": "https://sapphire-led.com/products/street-pro"
+    }
+  ],
+  "contacts": {
+    "phones": ["+7 (812) 000-00-00"],
+    "emails": ["hello@sapphire-led.com"]
+  }
+}

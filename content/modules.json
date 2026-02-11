@@ -1,0 +1,29 @@
+{
+  "title": "LED Modules",
+  "source_url": "https://led-modules.ru/",
+  "contacts": {
+    "phones": ["+7 (495) 000-00-00"],
+    "emails": ["info@led-modules.ru"]
+  },
+  "categories": [
+    {
+      "name": "Светодиодные модули",
+      "slug": "svetodiodnye-moduli",
+      "source_url": "https://led-modules.ru/catalog/",
+      "items": [
+        {
+          "name": "Модуль LM-5050",
+          "slug": "modul-lm-5050",
+          "description": "Компактный модуль для рекламных конструкций и подсветки.",
+          "specs": {
+            "Напряжение": "12V",
+            "Мощность": "1.2W",
+            "IP": "IP65"
+          },
+          "images": [],
+          "source_url": "https://led-modules.ru/catalog/lm-5050/"
+        }
+      ]
+    }
+  ]
+}
