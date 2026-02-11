@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" role="img" aria-label="Выбор шага пикселя">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#020617"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b122b"/><stop offset="55%" stop-color="#1d4ed8" stop-opacity="0.35"/><stop offset="100%" stop-color="#020617"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="70%"><stop offset="0%" stop-color="#22d3ee" stop-opacity="0.7"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.05"/></radialGradient>
+  </defs>
+  <rect width="560" height="360" rx="20" fill="url(#bg)"/>
+  <rect x="70" y="90" width="420" height="220" rx="18" fill="url(#panel)" stroke="rgba(148,163,184,0.45)"/><g opacity="0.35"><line x1="80" y1="100" x2="80" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="120" y1="100" x2="120" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="160" y1="100" x2="160" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="200" y1="100" x2="200" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="240" y1="100" x2="240" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="280" y1="100" x2="280" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="320" y1="100" x2="320" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="360" y1="100" x2="360" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="400" y1="100" x2="400" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="440" y1="100" x2="440" y2="300" stroke="#38bdf8" stroke-width="1"/><line x1="80" y1="110" x2="480" y2="110" stroke="#38bdf8" stroke-width="1"/><line x1="80" y1="145" x2="480" y2="145" stroke="#38bdf8" stroke-width="1"/><line x1="80" y1="180" x2="480" y2="180" stroke="#38bdf8" stroke-width="1"/><line x1="80" y1="215" x2="480" y2="215" stroke="#38bdf8" stroke-width="1"/><line x1="80" y1="250" x2="480" y2="250" stroke="#38bdf8" stroke-width="1"/><line x1="80" y1="285" x2="480" y2="285" stroke="#38bdf8" stroke-width="1"/></g>
+  <rect x="0" y="0" width="560" height="360" fill="url(#scan)" opacity="0.12"/>
+  <defs><pattern id="scan" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="1" fill="#38bdf8"/></pattern></defs>
+  <text x="28" y="326" fill="#e2e8f0" font-size="22" font-family="Inter,Arial,sans-serif">Выбор шага пикселя</text>
+  <text x="28" y="346" fill="#94a3b8" font-size="14" font-family="Inter,Arial,sans-serif">Расчёт под дистанцию просмотра</text>
+</svg>
