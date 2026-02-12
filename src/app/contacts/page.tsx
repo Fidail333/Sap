@@ -19,7 +19,7 @@ export default function ContactsPage({ searchParams }: { searchParams?: { produc
         {product ? (
           <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-cyan-300/30 bg-cyan-300/10 px-4 py-3 text-sm text-cyan-100">
             <span>Запрос по товару: {product}</span>
-            <Link href="/products" className="rounded-lg border border-cyan-300/40 px-3 py-1.5 text-cyan-200 hover:bg-cyan-300/20">Перейти в каталог</Link>
+            <Link href="/catalog" className="rounded-lg border border-cyan-300/40 px-3 py-1.5 text-cyan-200 hover:bg-cyan-300/20">Перейти в каталог</Link>
           </div>
         ) : null}
 

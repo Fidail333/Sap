@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 const nav = [
   { href: '/', label: 'Главная' },
-  { href: '/products', label: 'Каталог' },
+  { href: '/catalog', label: 'Каталог' },
   { href: '/about', label: 'О компании' },
   { href: '/contacts', label: 'Контакты' },
   { href: '/blog', label: 'Материалы' }

@@ -1,16 +1,18 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { JsonLd } from '@/components/JsonLd';
 import { Badge } from '@/components/ui/Badge';
 import { Section } from '@/components/ui/Section';
 import { blogPosts } from '@/data/blog';
-import { buildMetadata } from '@/lib/seo';
+import { articleSchema, buildMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = buildMetadata('Материалы | Sapphire LED', 'Новости и статьи о LED-модулях, монтаже и эксплуатации экранов.', '/blog');
 
 export default function BlogPage() {
   return (
     <main>
+      <JsonLd data={blogPosts.map((post) => articleSchema({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, image: post.image }))} />
       <Section>
         <h1 className="text-3xl font-semibold sm:text-4xl">Материалы: новости и статьи</h1>
         <p className="mt-3 max-w-3xl text-slate-300">Подборка практических материалов по LED-технологиям, проектированию, монтажу и обслуживанию экранов.</p>
