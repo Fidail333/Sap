@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { CatalogCard } from '@/components/CatalogCard';
+import { JsonLd } from '@/components/JsonLd';
 import { Reveal } from '@/components/Reveal';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -8,7 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { Section } from '@/components/ui/Section';
 import { productsData } from '@/lib/content';
 import { blogPosts } from '@/data/blog';
-import { buildMetadata } from '@/lib/seo';
+import { buildMetadata, faqSchema } from '@/lib/seo';
 
 export const metadata: Metadata = buildMetadata('Премиальные LED-решения для бизнеса | Sapphire LED', 'LED-экраны для indoor, outdoor, rental и control rooms с инженерным сопровождением и сервисом.', '/');
 
@@ -107,6 +108,7 @@ function AdvantageIcon({ label }: { label: string }) {
 export default function Home() {
   return (
     <main>
+      <JsonLd data={faqSchema(faq.map(([question, answer]) => ({ question, answer })))} />
       <Section className="pt-12 md:pt-20">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <Reveal>
@@ -114,7 +116,7 @@ export default function Home() {
             <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl md:text-6xl">Инженерные LED-экраны для брендов, инфраструктуры и корпоративных пространств.</h1>
             <p className="mt-4 max-w-xl text-slate-300">Проектируем, поставляем и сопровождаем LED-системы полного цикла: от концепции и контента до монтажа и сервисной поддержки.</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button href="/products">Подобрать экран</Button>
+              <Button href="/catalog">Подобрать экран</Button>
               <Button href="/contacts">Получить коммерческое предложение</Button>
             </div>
           </Reveal>
@@ -162,13 +164,38 @@ export default function Home() {
       </Section>
 
       <Section>
-        <div className="flex items-end justify-between gap-6"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/products" variant="secondary">Весь каталог</Button></div>
+        <div className="flex items-end justify-between gap-6"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/catalog" variant="secondary">Весь каталог</Button></div>
         <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0, 6).map((item) => <Reveal key={item.id}><CatalogCard item={item} /></Reveal>)}</div>
       </Section>
 
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">Процесс работы</h2></Reveal>
         <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-4">{process.map((item, index) => <Reveal key={item}><Card><p className="text-cyan-300">0{index + 1}</p><p className="mt-2 text-sm text-slate-300">{item}</p></Card></Reveal>)}</div>
+      </Section>
+
+      <Section>
+        <div className="flex items-end justify-between gap-6">
+          <Reveal><h2 className="text-3xl font-semibold">Популярные направления</h2></Reveal>
+          <Button href="/led-ekrany" variant="secondary">Все направления</Button>
+        </div>
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {[
+            { href: '/led-ekrany', label: 'LED-экраны' },
+            { href: '/ulichnye-led-ekrany', label: 'Уличные LED-экраны' },
+            { href: '/reklamnye-led-ekrany', label: 'Рекламные LED-экраны' },
+            { href: '/bolshie-led-ekrany', label: 'Большие LED-экраны' },
+            { href: '/indoor-led-ekrany', label: 'LED-экраны для помещений' },
+            { href: '/outdoor-led-ekrany', label: 'Outdoor LED-экраны' }
+          ].map((item) => (
+            <Reveal key={item.href}>
+              <Card>
+                <h3 className="text-lg font-semibold">{item.label}</h3>
+                <p className="mt-2 text-sm text-slate-300">Коммерческие и инженерные рекомендации для выбора LED-экрана под задачу.</p>
+                <Button href={item.href} variant="secondary" className="mt-4">Перейти</Button>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
       </Section>
 
       <Section>

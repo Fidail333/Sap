@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { JsonLd } from '@/components/JsonLd';
 import { Badge } from '@/components/ui/Badge';
 import { Section } from '@/components/ui/Section';
 import { blogPosts } from '@/data/blog';
-import { buildMetadata } from '@/lib/seo';
+import { articleSchema, buildMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
@@ -41,6 +42,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   return (
     <main>
+      <JsonLd data={articleSchema({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, image: post.image })} />
       <Section>
         <article className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
           <div className="relative h-64 w-full md:h-80">
