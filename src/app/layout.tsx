@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { JsonLd } from '@/components/JsonLd';
 import { BreadcrumbsJsonLd } from '@/components/BreadcrumbsJsonLd';
 import { AnalyticsScripts } from '@/components/AnalyticsScripts';
+import { ChatWidget } from '@/components/ChatWidget';
 import { buildMetadata, orgSchema, websiteSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Header />
         {children}
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );

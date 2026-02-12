@@ -54,6 +54,15 @@ export function Header() {
           ))}
         </nav>
 
+
+        <button
+          type="button"
+          data-chat-open
+          className="rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-medium text-cyan-100 transition hover:bg-cyan-300/20 sm:text-sm"
+        >
+          Чат
+        </button>
+
         <Link
           href="tel:+79031108467"
           className="group rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-2.5 py-2 transition hover:bg-cyan-300/20 md:px-3"
@@ -77,6 +86,13 @@ export function Header() {
               <NavLabel href={item.href} label={item.label} />
             </Link>
           ))}
+          <button
+            type="button"
+            data-chat-open
+            className="shrink-0 rounded-lg border border-cyan-300/30 px-2 py-1 text-xs text-cyan-100"
+          >
+            Чат
+          </button>
         </nav>
       </div>
     </header>

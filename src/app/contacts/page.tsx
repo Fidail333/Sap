@@ -23,6 +23,18 @@ export default function ContactsPage({ searchParams }: { searchParams?: { produc
           </div>
         ) : null}
 
+
+
+        <div className="mt-6 sm:mt-8">
+          <button
+            type="button"
+            data-chat-open
+            className="inline-flex w-full items-center justify-center rounded-2xl border border-cyan-300/40 bg-gradient-to-r from-cyan-300/20 to-sky-400/20 px-6 py-4 text-base font-semibold text-cyan-100 transition hover:from-cyan-300/30 hover:to-sky-400/30 sm:w-auto"
+          >
+            Связаться с инженером
+          </button>
+        </div>
+
         <div className="mt-6 grid gap-6 md:mt-8 md:gap-8 lg:grid-cols-2">
           <div className="grid gap-4">
             <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
