@@ -113,7 +113,7 @@ export default function Home() {
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <Reveal>
             <Badge>Premium LED integrator</Badge>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl md:text-6xl">Инженерные LED-экраны для брендов, инфраструктуры и корпоративных пространств.</h1>
+            <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl md:text-6xl">Инженерные LED-экраны для бизнеса, рекламы и корпоративных пространств</h1>
             <p className="mt-4 max-w-xl text-slate-300">Проектируем, поставляем и сопровождаем LED-системы полного цикла: от концепции и контента до монтажа и сервисной поддержки.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button href="/catalog">Подобрать экран</Button>
@@ -122,7 +122,7 @@ export default function Home() {
           </Reveal>
           <Reveal>
             <div className="scanline relative min-h-[440px] overflow-hidden rounded-3xl border border-cyan-200/20 bg-slate-900/70 sm:min-h-[500px] md:min-h-[420px]">
-              <Image src="/visuals/photo_2026-02-11_17-22-55.jpg" alt="Фоновое изображение LED-экрана" fill className="object-cover object-center" priority />
+              <Image src="/visuals/photo_2026-02-11_17-22-55.jpg" alt="Уличный рекламный LED-экран большого формата на фасаде здания" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover object-center" priority />
               <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/80 via-slate-950/35 to-cyan-900/20" />
             </div>
           </Reveal>
@@ -136,7 +136,7 @@ export default function Home() {
             <Reveal key={item.title}>
               <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-44 w-full">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
                   <h3 className="break-words text-lg font-semibold leading-tight">{item.title}</h3>
@@ -203,6 +203,52 @@ export default function Home() {
         <div className="mt-6 space-y-3 md:mt-8">{faq.map(([q, a]) => <Reveal key={q}><details className="rounded-xl border border-white/10 bg-white/[0.03] p-4"><summary className="cursor-pointer font-medium">{q}</summary><p className="mt-3 text-sm leading-relaxed text-slate-300">{a}</p></details></Reveal>)}</div>
       </Section>
 
+
+      <Section>
+        <Reveal><h2 className="text-3xl font-semibold">Подробнее о решениях Sapphire LED</h2></Reveal>
+        <Reveal>
+          <details className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <summary className="cursor-pointer text-lg font-medium text-cyan-200">Открыть SEO-обзор по выбору LED-экранов для бизнеса</summary>
+            <div className="mt-6 space-y-5 text-sm leading-relaxed text-slate-300 md:text-base">
+              <p>
+                LED экраны сегодня используются не только как витрина для яркого контента, но и как полноценный инструмент маркетинга и коммуникации.
+                Для бизнеса это способ одновременно повысить узнаваемость бренда, поддерживать промо-кампании и показывать актуальную информацию в режиме реального времени.
+                В зависимости от места установки и задач мы подбираем как интерьерные, так и уличные LED экраны, учитывая реальную дистанцию просмотра, уровень внешней засветки и режим работы оборудования.
+                Такой инженерный подход помогает избежать переплаты и получить стабильную картинку без провалов по яркости или контрасту.
+              </p>
+              <h3 className="text-xl font-semibold text-white">Какие LED-экраны подходят для разных сценариев</h3>
+              <p>
+                Для фасадов и городских локаций чаще выбирают экраны для наружной рекламы с высоким уровнем яркости и защитой от влаги и пыли.
+                Уличные LED экраны должны стабильно работать при перепадах температуры, выдерживать осадки и сохранять читаемость контента в солнечную погоду.
+                Для торговых центров, шоурумов и офисов, наоборот, важнее точность цветопередачи и комфорт при близком просмотре.
+                В таких проектах востребованы рекламные LED экраны с мелким шагом пикселя, а также панели для презентационных зон и переговорных.
+                Если задача связана с охватом большого потока людей, используют большие LED экраны, которые обеспечивают заметность контента даже на значительной дистанции.
+              </p>
+              <h3 className="text-xl font-semibold text-white">Технические критерии выбора: шаг пикселя, яркость, защита</h3>
+              <p>
+                Светодиодные экраны для бизнеса подбираются по нескольким параметрам: шаг пикселя, яркость, угол обзора, частота обновления и класс защиты корпуса.
+                Чем ближе зритель к поверхности, тем выше требования к плотности пикселей.
+                Для улицы приоритетом становится запас яркости и соответствие IP-стандартам, а для видеостудий и трансляций — повышенная частота обновления без мерцания.
+                Мы также учитываем конструктив площадки, доступ к обслуживанию и перспективы масштабирования, чтобы решение оставалось актуальным не один сезон.
+              </p>
+              <h3 className="text-xl font-semibold text-white">COB и GOB: когда эти технологии действительно полезны</h3>
+              <p>
+                При проектировании современных систем часто рассматривают технологии COB / GOB.
+                COB помогает получить высокую однородность и аккуратную детализацию изображения на коротких дистанциях, что особенно важно для корпоративных пространств, диспетчерских и премиальных витрин.
+                GOB добавляет защитный слой, повышая устойчивость поверхности к внешним воздействиям, поэтому такой формат актуален для общественных зон и интенсивной эксплуатации.
+                Выбор между COB и GOB зависит от сценария использования, требований к визуальному качеству и бюджета проекта.
+              </p>
+              <h3 className="text-xl font-semibold text-white">Что получает компания после внедрения LED-решения</h3>
+              <p>
+                Грамотно спроектированные LED экраны дают бизнесу измеримый эффект: рост заметности, более высокую вовлеченность аудитории и удобное управление контентом для разных площадок.
+                В наружной рекламе это помогает повысить частоту контакта с брендом, в ритейле — усиливать промо, а в корпоративной среде — улучшать навигацию и визуальные коммуникации.
+                Мы дополняем поставку инженерной поддержкой, чтобы система была удобной в эксплуатации, масштабировалась под новые задачи и сохраняла качество изображения на всем жизненном цикле.
+              </p>
+            </div>
+          </details>
+        </Reveal>
+      </Section>
+
       <Section>
         <div className="flex items-end justify-between gap-6">
           <Reveal><h2 className="text-3xl font-semibold">Новости и статьи</h2></Reveal>
@@ -213,7 +259,7 @@ export default function Home() {
             <Reveal key={item.slug}>
               <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-40 w-full">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
                   <p className="text-xs text-cyan-300">{item.type}</p>
@@ -234,7 +280,7 @@ export default function Home() {
             <Reveal key={item.title}>
               <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-36 w-full">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-cyan-300">{item.industry}</p>
