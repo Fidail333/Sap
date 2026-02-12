@@ -59,6 +59,7 @@ export function Header() {
           type="button"
           data-chat-open
           className="rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-medium text-cyan-100 transition hover:bg-cyan-300/20 sm:text-sm"
+          aria-label="Открыть чат с инженером"
         >
           Чат
         </button>
@@ -90,6 +91,7 @@ export function Header() {
             type="button"
             data-chat-open
             className="shrink-0 rounded-lg border border-cyan-300/30 px-2 py-1 text-xs text-cyan-100"
+            aria-label="Открыть чат с инженером"
           >
             Чат
           </button>
