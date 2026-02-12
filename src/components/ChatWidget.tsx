@@ -65,10 +65,6 @@ const keywords: Array<{ check: RegExp; reply: string }> = [
   { check: /(кп|коммерч|предложени|цена|стоим)/i, reply: quickReplies[4].reply }
 ];
 
-function sanitizePhoneInput(phone: string) {
-  return phone.replace(/[\s()-]/g, '');
-}
-
 function normalizeRuPhone(phone: string) {
   const digits = phone.replace(/\D/g, '');
 
@@ -86,6 +82,15 @@ function normalizeRuPhone(phone: string) {
 
 function isValidRuPhone(phone: string) {
   return /^\+7\d{10}$/.test(phone);
+}
+
+function getTimeGreeting() {
+  const hour = new Date().getHours();
+
+  if (hour >= 5 && hour <= 11) return 'Доброе утро';
+  if (hour >= 12 && hour <= 16) return 'Добрый день';
+  if (hour >= 17 && hour <= 22) return 'Добрый вечер';
+  return 'Доброй ночи';
 }
 
 function makeId() {
@@ -249,8 +254,7 @@ export function ChatWidget() {
   }
 
   const validatePhone = useCallback((value: string) => {
-    const normalized = normalizeRuPhone(value);
-    return isValidRuPhone(normalized) ? '' : 'Введите корректный номер телефона РФ';
+    return value.trim() ? '' : 'Укажите любой удобный способ связи';
   }, []);
 
   const validateConsent = useCallback((value: boolean) => {
@@ -291,6 +295,13 @@ export function ChatWidget() {
 
     setLeadStatus('loading');
     const normalizedPhone = normalizeRuPhone(phone);
+    const leadPhoneForApi = isValidRuPhone(normalizedPhone) ? normalizedPhone : '+70000000000';
+    const preparedLeadMessage = [
+      `Контакт: ${phone.trim()}`,
+      leadMessage.trim() || input.trim()
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     const history = messages.slice(-6).map((msg) => ({ role: msg.role, text: msg.text }));
 
@@ -300,8 +311,8 @@ export function ChatWidget() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim() || undefined,
-          phone: normalizedPhone,
-          message: leadMessage.trim() || input.trim() || undefined,
+          phone: leadPhoneForApi,
+          message: preparedLeadMessage || undefined,
           pageUrl: window.location.href,
           pageTitle: document.title,
           history,
@@ -321,7 +332,9 @@ export function ChatWidget() {
         setConsent(false);
         setFormErrors({ phone: '', consent: '', submit: '' });
         setShowLeadForm(false);
-        appendBotMessage('Заявка отправлена. Инженер свяжется с вами.');
+        appendBotMessage(
+          `${getTimeGreeting()}!\nМеня зовут Алсу, я искусственный помощник Sapphire LED 🤖\n\nЯ передала вашу заявку настоящему инженеру Алсу 😊. Специалист свяжется с вами в ближайшее рабочее время, чтобы:\n— уточнить задачу\n— подобрать оптимальное LED-решение\n— рассчитать стоимость и сроки\n\nЕсли у вас появятся дополнительные вопросы — можете написать их здесь.`
+        );
         return;
       }
 
@@ -484,24 +497,17 @@ export function ChatWidget() {
                         className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
                       />
                       <input
-                        type="tel"
+                        type="text"
                         value={phone}
                         onChange={(event) => {
-                          const nextPhone = sanitizePhoneInput(event.target.value);
+                          const nextPhone = event.target.value;
                           setPhone(nextPhone);
                           setFormErrors((prev) => ({ ...prev, phone: validatePhone(nextPhone), submit: '' }));
                         }}
                         onBlur={(event) => {
-                          const normalized = normalizeRuPhone(event.target.value);
-                          if (normalized) {
-                            setPhone(normalized);
-                            setFormErrors((prev) => ({ ...prev, phone: '' }));
-                            return;
-                          }
-
                           setFormErrors((prev) => ({ ...prev, phone: validatePhone(event.target.value) }));
                         }}
-                        placeholder="Телефон *"
+                        placeholder="Телефон / Контакт *"
                         className={`w-full rounded-xl border bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:ring-1 ${
                           formErrors.phone ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500' : 'border-slate-200 focus:border-cyan-400 focus:ring-cyan-400'
                         }`}
