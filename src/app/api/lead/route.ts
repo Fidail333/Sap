@@ -36,7 +36,21 @@ function escapeHtml(input: string) {
 }
 
 function normalizePhone(phone: string) {
-  return phone.replace(/\D/g, '');
+  const digits = phone.replace(/\D/g, '');
+
+  if (digits.length === 11 && digits.startsWith('8')) {
+    return `+7${digits.slice(1)}`;
+  }
+
+  if (digits.length === 11 && digits.startsWith('7')) {
+    return `+${digits}`;
+  }
+
+  return '';
+}
+
+function isValidRuPhone(phone: string) {
+  return /^\+7\d{10}$/.test(phone);
 }
 
 function getClientIp(request: Request) {
@@ -104,7 +118,7 @@ export async function POST(request: Request) {
   }
 
   const normalizedPhone = normalizePhone(String(payload.phone || ''));
-  if (normalizedPhone.length < 10) {
+  if (!isValidRuPhone(normalizedPhone)) {
     return NextResponse.json({ ok: false, error: 'invalid_phone' }, { status: 400 });
   }
 
@@ -138,7 +152,7 @@ export async function POST(request: Request) {
 
   const messageText = lines.filter(Boolean).join('\n');
 
-  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_ADMIN_CHAT_ID) {
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
     return NextResponse.json({ ok: false, error: 'telegram_not_configured' }, { status: 500 });
   }
 
@@ -146,7 +160,7 @@ export async function POST(request: Request) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      chat_id: process.env.TELEGRAM_ADMIN_CHAT_ID,
+      chat_id: process.env.TELEGRAM_CHAT_ID,
       parse_mode: 'HTML',
       text: messageText,
       disable_web_page_preview: true
@@ -155,7 +169,11 @@ export async function POST(request: Request) {
 
   if (!telegramResponse.ok) {
     const telegramError = await telegramResponse.text().catch(() => 'telegram_error');
-    return NextResponse.json({ ok: false, error: telegramError }, { status: 500 });
+    console.error('Telegram API error', {
+      status: telegramResponse.status,
+      body: telegramError
+    });
+    return NextResponse.json({ ok: false, error: 'telegram_error' }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
