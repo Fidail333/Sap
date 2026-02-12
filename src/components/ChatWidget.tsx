@@ -12,6 +12,12 @@ type ChatMessage = {
   text: string;
 };
 
+type FormErrors = {
+  phone: string;
+  consent: string;
+  submit: string;
+};
+
 type LeadStatus = 'idle' | 'loading' | 'success' | 'error';
 
 type QuickReply = {
@@ -59,10 +65,27 @@ const keywords: Array<{ check: RegExp; reply: string }> = [
   { check: /(кп|коммерч|предложени|цена|стоим)/i, reply: quickReplies[4].reply }
 ];
 
-const phoneDigitsMin = 10;
+function sanitizePhoneInput(phone: string) {
+  return phone.replace(/[\s()-]/g, '');
+}
 
-function normalizePhone(phone: string) {
-  return phone.replace(/\D/g, '');
+function normalizeRuPhone(phone: string) {
+  const digits = phone.replace(/\D/g, '');
+
+  if (digits.length === 11 && digits.startsWith('8')) {
+    return `+7${digits.slice(1)}`;
+  }
+
+  if (digits.length === 11 && digits.startsWith('7')) {
+    return `+${digits}`;
+  }
+
+
+  return '';
+}
+
+function isValidRuPhone(phone: string) {
+  return /^\+7\d{10}$/.test(phone);
 }
 
 function makeId() {
@@ -73,7 +96,7 @@ function getBotWelcome(): ChatMessage {
   return {
     id: makeId(),
     role: 'bot',
-    text: 'Привет! Я Алсу, онлайн-консультант Sapphire LED. Могу подсказать и передать запрос инженеру.'
+    text: 'Привет! Я Алсу, инженер Sapphire LED. Могу подсказать и передать запрос инженеру.'
   };
 }
 
@@ -127,7 +150,7 @@ export function ChatWidget() {
   const [phone, setPhone] = useState('');
   const [leadMessage, setLeadMessage] = useState('');
   const [consent, setConsent] = useState(false);
-  const [fieldError, setFieldError] = useState('');
+  const [formErrors, setFormErrors] = useState<FormErrors>({ phone: '', consent: '', submit: '' });
   const [leadStatus, setLeadStatus] = useState<LeadStatus>('idle');
   const [avatarError, setAvatarError] = useState(false);
 
@@ -225,6 +248,15 @@ export function ChatWidget() {
     openFormWithPrefill(item.label);
   }
 
+  const validatePhone = useCallback((value: string) => {
+    const normalized = normalizeRuPhone(value);
+    return isValidRuPhone(normalized) ? '' : 'Введите корректный номер телефона РФ';
+  }, []);
+
+  const validateConsent = useCallback((value: boolean) => {
+    return value ? '' : 'Необходимо согласие на обработку персональных данных';
+  }, []);
+
   function handleUserInputSubmit(event: React.FormEvent) {
     event.preventDefault();
     const text = input.trim();
@@ -246,20 +278,19 @@ export function ChatWidget() {
 
   async function submitLead(event: React.FormEvent) {
     event.preventDefault();
-    setFieldError('');
 
-    const normalizedPhone = normalizePhone(phone);
-    if (normalizedPhone.length < phoneDigitsMin) {
-      setFieldError('Введите телефон: минимум 10 цифр.');
+    const phoneError = validatePhone(phone);
+    const consentError = validateConsent(consent);
+
+    if (phoneError || consentError) {
+      setFormErrors({ phone: phoneError, consent: consentError, submit: '' });
       return;
     }
 
-    if (!consent) {
-      setFieldError('Необходимо согласие на обработку персональных данных.');
-      return;
-    }
+    setFormErrors({ phone: '', consent: '', submit: '' });
 
     setLeadStatus('loading');
+    const normalizedPhone = normalizeRuPhone(phone);
 
     const history = messages.slice(-6).map((msg) => ({ role: msg.role, text: msg.text }));
 
@@ -269,7 +300,7 @@ export function ChatWidget() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim() || undefined,
-          phone: phone.trim(),
+          phone: normalizedPhone,
           message: leadMessage.trim() || input.trim() || undefined,
           pageUrl: window.location.href,
           pageTitle: document.title,
@@ -288,6 +319,7 @@ export function ChatWidget() {
         setName('');
         setLeadMessage('');
         setConsent(false);
+        setFormErrors({ phone: '', consent: '', submit: '' });
         setShowLeadForm(false);
         appendBotMessage('Заявка отправлена. Инженер свяжется с вами.');
         return;
@@ -295,19 +327,21 @@ export function ChatWidget() {
 
       if (response.status === 429 || data.error === 'too_many_requests') {
         setLeadStatus('error');
-        setFieldError('Слишком много запросов. Попробуйте позже.');
+        setFormErrors((prev) => ({ ...prev, submit: 'Слишком много запросов. Попробуйте позже.' }));
         return;
       }
 
       setLeadStatus('error');
-      setFieldError('Не удалось отправить, попробуйте ещё раз.');
+      setFormErrors((prev) => ({ ...prev, submit: 'Не удалось отправить, попробуйте ещё раз.' }));
     } catch {
       setLeadStatus('error');
-      setFieldError('Не удалось отправить, попробуйте ещё раз.');
+      setFormErrors((prev) => ({ ...prev, submit: 'Не удалось отправить, попробуйте ещё раз.' }));
     }
   }
 
-  const isLeadSubmitDisabled = normalizePhone(phone).length < phoneDigitsMin || !consent || leadStatus === 'loading';
+  const isPhoneValid = !validatePhone(phone);
+  const isConsentValid = !validateConsent(consent);
+  const isLeadSubmitDisabled = !isPhoneValid || !isConsentValid || leadStatus === 'loading';
 
   const renderAlsuAvatar = (sizeClass: string) => (
     <span className={`relative inline-flex ${sizeClass} shrink-0 overflow-hidden rounded-full border border-white/65 bg-white shadow-[0_4px_14px_rgba(15,23,42,0.18)]`}>
@@ -372,7 +406,7 @@ export function ChatWidget() {
                     <span className="relative h-10 w-10">{renderAlsuAvatar('h-full w-full')}</span>
                     <div>
                       <p className="text-sm font-semibold text-slate-900">Алсу</p>
-                      <p className="text-[11px] text-slate-500">консультант • ответ в течение рабочего дня</p>
+                      <p className="text-[11px] text-slate-500">инженер • ответ в течение рабочего дня</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-0.5">
@@ -452,11 +486,28 @@ export function ChatWidget() {
                       <input
                         type="tel"
                         value={phone}
-                        onChange={(event) => setPhone(event.target.value)}
+                        onChange={(event) => {
+                          const nextPhone = sanitizePhoneInput(event.target.value);
+                          setPhone(nextPhone);
+                          setFormErrors((prev) => ({ ...prev, phone: validatePhone(nextPhone), submit: '' }));
+                        }}
+                        onBlur={(event) => {
+                          const normalized = normalizeRuPhone(event.target.value);
+                          if (normalized) {
+                            setPhone(normalized);
+                            setFormErrors((prev) => ({ ...prev, phone: '' }));
+                            return;
+                          }
+
+                          setFormErrors((prev) => ({ ...prev, phone: validatePhone(event.target.value) }));
+                        }}
                         placeholder="Телефон *"
-                        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
+                        className={`w-full rounded-xl border bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:ring-1 ${
+                          formErrors.phone ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500' : 'border-slate-200 focus:border-cyan-400 focus:ring-cyan-400'
+                        }`}
                         required
                       />
+                      {formErrors.phone ? <p className="text-xs text-rose-600">{formErrors.phone}</p> : null}
                       <textarea
                         value={leadMessage}
                         onChange={(event) => setLeadMessage(event.target.value)}
@@ -465,22 +516,29 @@ export function ChatWidget() {
                         className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
                       />
                       <input type="text" name="hp" autoComplete="off" tabIndex={-1} className="hidden" aria-hidden="true" />
-                      <label className="flex items-start gap-2 text-xs text-slate-600">
+                      <label
+                        className={`grid grid-cols-[auto,1fr] items-start gap-2 text-xs leading-5 ${formErrors.consent ? 'text-rose-600' : 'text-slate-600'}`}
+                      >
                         <input
                           type="checkbox"
                           checked={consent}
-                          onChange={(event) => setConsent(event.target.checked)}
-                          className="mt-0.5"
+                          onChange={(event) => {
+                            const nextConsent = event.target.checked;
+                            setConsent(nextConsent);
+                            setFormErrors((prev) => ({ ...prev, consent: validateConsent(nextConsent), submit: '' }));
+                          }}
+                          className={`mt-0.5 h-4 w-4 rounded border ${formErrors.consent ? 'border-rose-500 accent-rose-500' : 'border-slate-300 accent-cyan-600'}`}
                         />
-                        <span>
-                          Согласен на обработку персональных данных ({' '}
+                        <span className="min-w-0 break-words">
+                          Согласен на обработку персональных данных (
                           <Link href="/privacy" className="text-cyan-700 underline underline-offset-2 hover:text-cyan-600">
                             Политика
                           </Link>
                           )
                         </span>
                       </label>
-                      {fieldError ? <p className="text-xs text-rose-500">{fieldError}</p> : null}
+                      {formErrors.consent ? <p className="text-xs text-rose-600">{formErrors.consent}</p> : null}
+                      {formErrors.submit ? <p className="text-xs text-rose-600">{formErrors.submit}</p> : null}
                       <button
                         type="submit"
                         disabled={isLeadSubmitDisabled}
