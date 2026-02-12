@@ -1,5 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Section } from '@/components/ui/Section';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata(
+  'Заявка отправлена | Sapphire LED',
+  'Подтверждение отправки заявки в Sapphire LED. Наш инженер свяжется с вами в рабочее время.',
+  '/request/thanks'
+);
 
 export default function ThanksPage() {
   return (

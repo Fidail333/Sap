@@ -30,7 +30,7 @@ ym(${yandexMetricaId}, "init", {clickmap:true, trackLinks:true, accurateTrackBou
           </Script>
           <noscript>
             <div>
-              <img src={`https://mc.yandex.ru/watch/${yandexMetricaId}`} style={{ position: 'absolute', left: '-9999px' }} alt="" />
+              <img src={`https://mc.yandex.ru/watch/${yandexMetricaId}`} style={{ position: 'absolute', left: '-9999px' }} alt="Счетчик посещаемости Яндекс Метрики" />
             </div>
           </noscript>
         </>
