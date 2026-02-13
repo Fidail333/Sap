@@ -24,6 +24,24 @@ body::before {
   z-index: -1;
 }
 
+body::after {
+  content: '';
+  position: fixed;
+  top: -8px;
+  left: 16vw;
+  width: 3px;
+  height: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(221, 241, 255, 0.8), rgba(178, 222, 255, 0.45));
+  box-shadow: 0 0 10px rgba(173, 216, 255, 0.42);
+  opacity: 0;
+  transform: translate3d(0, -8vh, 0);
+  animation: falling-star 1.1s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform, opacity;
+}
+
 .scanline::after {
   content: '';
   position: absolute;
@@ -45,13 +63,39 @@ body::before {
   to { transform: translateY(4%); }
 }
 
+@keyframes falling-star {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -10vh, 0) scale(0.9);
+  }
+  18% {
+    opacity: 0.68;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(28px, 108vh, 0) scale(1);
+  }
+}
+
 .partners-marquee-track {
   animation: partners-marquee 52s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  body::after {
+    animation: none;
+    opacity: 0;
+  }
+
   .partners-marquee-track {
     animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body::after {
+    animation-duration: 2.4s;
+    opacity: 0.35;
   }
 }
 
