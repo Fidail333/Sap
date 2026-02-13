@@ -4,12 +4,15 @@ import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { Badge } from '@/components/ui/Badge';
 import { Section } from '@/components/ui/Section';
-import { blogPosts } from '@/data/blog';
+import { getPublishedBlogEntries } from '@/lib/cms';
 import { articleSchema, buildMetadata } from '@/lib/seo';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = buildMetadata('Материалы | Sapphire LED', 'Новости и статьи о LED-модулях, монтаже и эксплуатации экранов.', '/blog');
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const blogPosts = await getPublishedBlogEntries();
+
   return (
     <main>
       <JsonLd data={blogPosts.map((post) => articleSchema({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, image: post.image }))} />
@@ -31,11 +34,6 @@ export default function BlogPage() {
                   <Link href={`/blog/${post.slug}`} className="hover:text-cyan-200">{post.title}</Link>
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-300">{post.excerpt}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-white/20 px-2 py-1 text-xs text-slate-300">#{tag}</span>
-                  ))}
-                </div>
               </div>
             </article>
           ))}

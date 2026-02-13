@@ -1,26 +1,28 @@
 import { NextResponse } from 'next/server';
+import { createLead } from '@/lib/cms';
 
 export async function POST(request: Request) {
   const data = await request.formData();
 
-  if (data.get('consent') !== 'on') {
-    return NextResponse.json({ error: 'Требуется согласие' }, { status: 400 });
-  }
-
   const name = String(data.get('name') || '').trim();
   const email = String(data.get('email') || '').trim();
+  const comment = String(data.get('comment') || '').trim();
+  const consent = String(data.get('consent') || '');
+
   if (!name || !email) {
-    return NextResponse.json({ error: 'Заполните обязательные поля' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'name_email_required' }, { status: 400 });
   }
 
-  const payload = {
-    name,
-    email,
-    comment: String(data.get('comment') || ''),
-    productName: String(data.get('productName') || ''),
-    productId: String(data.get('productId') || '')
-  };
+  if (consent !== 'on') {
+    return NextResponse.json({ ok: false, error: 'consent_required' }, { status: 400 });
+  }
 
-  console.log('REQUEST_FORM_PAYLOAD', payload);
-  return NextResponse.json({ ok: true, integrations: { smtpReady: Boolean(process.env.SMTP_HOST), telegramReady: Boolean(process.env.TELEGRAM_BOT_TOKEN) } });
+  await createLead({
+    name,
+    contact: email,
+    message: comment || 'Заявка из формы сайта',
+    source: 'form'
+  });
+
+  return NextResponse.json({ ok: true });
 }
