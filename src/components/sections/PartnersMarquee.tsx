@@ -20,19 +20,19 @@ const marqueeItems = [...partners, ...partners];
 
 export function PartnersMarquee() {
   return (
-    <Section>
+    <Section className="py-6 md:py-9 xl:py-12">
       <Reveal>
-        <h2 className="text-3xl font-semibold">Наши заказчики (партнёры)</h2>
+        <h2 className="text-3xl font-semibold">Наши заказчики</h2>
       </Reveal>
-      <div className="relative mt-6 md:mt-8">
+      <div className="relative mt-5 md:mt-6">
         <div className="partners-marquee flex gap-4 overflow-x-auto pb-2 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="partners-marquee-track flex min-w-max gap-4">
             {marqueeItems.map((partner, index) => (
-              <article key={`${partner.name}-${index}`} className="min-w-[160px] rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur sm:min-w-[180px]">
-                <div className="relative flex h-14 items-center justify-center">
-                  <Image src={partner.logoSrc} alt={partner.name} width={120} height={56} className="h-12 w-auto object-contain" />
+              <article key={`${partner.name}-${index}`} className="min-w-[170px] rounded-2xl border border-white/8 bg-white/[0.02] p-3 backdrop-blur sm:min-w-[190px] sm:p-3.5">
+                <div className="relative flex h-16 items-center justify-center sm:h-20 lg:h-24">
+                  <Image src={partner.logoSrc} alt={partner.name} width={168} height={96} className="h-14 w-auto object-contain sm:h-16 lg:h-20" />
                 </div>
-                <p className="mt-2 truncate text-xs text-slate-300/80">{partner.name}</p>
+                <p className="mx-auto mt-2 max-w-[15ch] truncate text-center text-sm font-medium text-white/90">{partner.name}</p>
               </article>
             ))}
           </div>
