@@ -10,6 +10,7 @@ import { Section } from '@/components/ui/Section';
 import { productsData } from '@/lib/content';
 import { blogPosts } from '@/data/blog';
 import { buildMetadata, faqSchema } from '@/lib/seo';
+import { PartnersMarquee } from '@/components/sections/PartnersMarquee';
 
 export const metadata: Metadata = buildMetadata('Премиальные LED-решения для бизнеса | Sapphire LED', 'LED-экраны для indoor, outdoor, rental и control rooms с инженерным сопровождением и сервисом.', '/');
 
@@ -70,32 +71,6 @@ const faq = [
   ['Можно ли масштабировать экран после запуска?', 'Да, при корректно заложенной архитектуре систему можно расширять секциями. Важно заранее предусмотреть резерв по питанию и управлению, чтобы масштабирование прошло без перестройки узлов.']
 ];
 
-const recentCases = [
-  {
-    title: 'Ритейл-пространство с медиастеной',
-    industry: 'Ритейл',
-    result: 'Собрана indoor-система для промо и навигации с акцентом на детализацию витринного контента.',
-    image: '/visuals/cases/case-retail.svg'
-  },
-  {
-    title: 'Сценический экран для event-площадки',
-    industry: 'События',
-    result: 'Модульная конфигурация для динамичного контента и стабильной работы во время программы.',
-    image: '/visuals/cases/case-stage.svg'
-  },
-  {
-    title: 'Уличный LED-фасад для коммерческого объекта',
-    industry: 'Outdoor',
-    result: 'Реализован яркий фасадный экран, рассчитанный на интенсивный городской поток и внешние условия.',
-    image: '/visuals/cases/case-outdoor.svg'
-  },
-  {
-    title: 'Информационное табло в диспетчерской зоне',
-    industry: 'Инфраструктура',
-    result: 'Настроена рабочая панель для визуализации данных и постоянного мониторинга.',
-    image: '/visuals/cases/case-control.svg'
-  }
-];
 
 function AdvantageIcon({ label }: { label: string }) {
   return (
@@ -128,6 +103,8 @@ export default function Home() {
           </Reveal>
         </div>
       </Section>
+
+      <PartnersMarquee />
 
       <Section id="solutions">
         <Reveal><h2 className="text-3xl font-semibold">Решения</h2></Reveal>
@@ -273,25 +250,6 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section>
-        <Reveal><h2 className="text-3xl font-semibold">Недавние кейсы</h2></Reveal>
-        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-4">
-          {recentCases.map((item) => (
-            <Reveal key={item.title}>
-              <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
-                <div className="relative h-36 w-full">
-                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
-                </div>
-                <div className="p-4">
-                  <p className="text-xs text-cyan-300">{item.industry}</p>
-                  <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm text-slate-300">{item.result}</p>
-                </div>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
     </main>
   );
 }
