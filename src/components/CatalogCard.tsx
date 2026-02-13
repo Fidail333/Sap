@@ -10,7 +10,9 @@ export function CatalogCard({ item }: { item: CatalogProductItem }) {
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition hover:-translate-y-1 hover:border-cyan-300/50">
-      <Image src={item.image} alt={item.name} width={1200} height={900} className="h-44 w-full object-cover" />
+      <Link href={`/products/${item.id}`} aria-label={`Открыть товар: ${item.name}`} className="block cursor-pointer">
+        <Image src={item.image} alt={item.name} width={1200} height={900} className="h-44 w-full object-cover" />
+      </Link>
       <div className="space-y-4 p-5">
         <div className="flex flex-wrap gap-2">
           {item.catalog_type === 'modules' ? item.badges.map((badge) => <Badge key={badge}>{badge}</Badge>) : <Badge>Премиальная серия</Badge>}
