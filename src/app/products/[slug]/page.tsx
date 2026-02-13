@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { ProductContactButton } from '@/components/ProductContactButton';
+import { Badge } from '@/components/ui/Badge';
 import { Section } from '@/components/ui/Section';
 import { getProductBySlug, productsData } from '@/lib/content';
 import { formatAvailabilityLabel, formatPrice, productTechLabel } from '@/lib/product-format';
@@ -75,7 +76,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <p className="mt-4 text-xl font-medium text-cyan-300">{formatPrice(product.price_rub)}</p>
             <p className="mt-2 inline-flex rounded-full border border-emerald-400/40 px-3 py-1 text-sm text-emerald-300">{formatAvailabilityLabel(product.availability)}</p>
             {product.catalog_type === 'modules' ? (
-              <div className="mt-4 flex flex-wrap gap-2">{product.badges.map((badge) => <span key={badge} className="rounded-full border border-white/20 px-3 py-1 text-xs text-slate-200">{badge}</span>)}</div>
+              <div className="mt-4 flex flex-wrap gap-2">{product.badges.map((badge) => <Badge key={badge}>{badge}</Badge>)}</div>
             ) : (
               <>
                 <div className="mt-4 flex flex-wrap gap-2"><span className="rounded-full border border-white/20 px-3 py-1 text-xs text-slate-200">Премиальная серия</span></div>
