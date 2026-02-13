@@ -39,7 +39,7 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5 lg:px-10">
         <Link href="/" className="inline-flex items-center" aria-label="Sapphire LED — главная страница">
-          <Image src="/visuals/logo.svg" alt="Sapphire LED" width={220} height={50} className="h-9 w-auto sm:h-10" priority />
+          <Image src="/visuals/SAPPHIRE-LOGO-2-0-F!-002.png" alt="Sapphire LED" width={220} height={50} className="h-11 w-auto sm:h-12" priority />
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm md:flex">
