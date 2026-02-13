@@ -6,15 +6,15 @@ type LeadHistoryItem = {
 };
 
 type LeadPayload = {
-  name?: string;
-  phone?: string;
-  message?: string;
+  source?: 'chat-widget';
+  location?: string;
+  purpose?: string;
+  size?: string;
+  timeline?: string;
+  contact?: string;
   pageUrl?: string;
   pageTitle?: string;
   history?: LeadHistoryItem[];
-  source?: 'chat-widget';
-  consent?: boolean;
-  hp?: string;
 };
 
 type RateLimitRecord = {
@@ -23,7 +23,7 @@ type RateLimitRecord = {
 };
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 3;
+const RATE_LIMIT_MAX_REQUESTS = 5;
 const rateLimitStore = new Map<string, RateLimitRecord>();
 
 function escapeHtml(input: string) {
@@ -33,24 +33,6 @@ function escapeHtml(input: string) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
-}
-
-function normalizePhone(phone: string) {
-  const digits = phone.replace(/\D/g, '');
-
-  if (digits.length === 11 && digits.startsWith('8')) {
-    return `+7${digits.slice(1)}`;
-  }
-
-  if (digits.length === 11 && digits.startsWith('7')) {
-    return `+${digits}`;
-  }
-
-  return '';
-}
-
-function isValidRuPhone(phone: string) {
-  return /^\+7\d{10}$/.test(phone);
 }
 
 function getClientIp(request: Request) {
@@ -95,12 +77,12 @@ function formatHistory(history: LeadHistoryItem[] | undefined) {
   const recent = history.slice(-6);
   const historyRows = recent
     .map((item) => {
-      const author = item.role === 'user' ? 'Клиент' : 'Бот';
+      const author = item.role === 'user' ? 'Клиент' : 'Алсу';
       return `• <b>${author}:</b> ${escapeHtml(item.text)}`;
     })
     .join('\n');
 
-  return `\n\n<b>Контекст (последние реплики):</b>\n${historyRows}`;
+  return `\n\n<b>💬 Контекст (последние реплики):</b>\n${historyRows}`;
 }
 
 export async function POST(request: Request) {
@@ -109,17 +91,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'invalid_json' }, { status: 400 });
   }
 
-  if (payload.hp && payload.hp.trim()) {
-    return NextResponse.json({ ok: false, error: 'spam_detected' }, { status: 400 });
-  }
-
-  if (payload.consent !== true) {
-    return NextResponse.json({ ok: false, error: 'consent_required' }, { status: 400 });
-  }
-
-  const normalizedPhone = normalizePhone(String(payload.phone || ''));
-  if (!isValidRuPhone(normalizedPhone)) {
-    return NextResponse.json({ ok: false, error: 'invalid_phone' }, { status: 400 });
+  const contact = String(payload.contact || '').trim();
+  if (!contact) {
+    return NextResponse.json({ ok: false, error: 'contact_required' }, { status: 400 });
   }
 
   const ip = getClientIp(request);
@@ -129,23 +103,21 @@ export async function POST(request: Request) {
   }
 
   const validHistory = Array.isArray(payload.history) ? payload.history.filter(isHistoryItem) : [];
-  const userAgent = request.headers.get('user-agent') || '';
 
   const lines = [
-    '<b>🟦 Новая заявка с сайта Sapphire LED</b>',
+    '<b>🟢 Новая заявка с сайта Sapphire LED</b>',
     '',
-    `<b>Имя:</b> ${escapeHtml(payload.name?.trim() || '—')}`,
-    `<b>Телефон:</b> ${escapeHtml(normalizedPhone)}`,
-    `<b>Сообщение:</b> ${escapeHtml(payload.message?.trim() || '—')}`,
-    `<b>Страница:</b> ${escapeHtml(payload.pageTitle?.trim() || '—')} (${escapeHtml(payload.pageUrl?.trim() || '—')})`
+    `<b>📍 Установка:</b> ${escapeHtml(payload.location?.trim() || '—')}`,
+    `<b>🎯 Назначение:</b> ${escapeHtml(payload.purpose?.trim() || '—')}`,
+    `<b>📐 Размер:</b> ${escapeHtml(payload.size?.trim() || '—')}`,
+    `<b>⏱ Сроки:</b> ${escapeHtml(payload.timeline?.trim() || '—')}`,
+    '',
+    '<b>📞 Контакт:</b>',
+    escapeHtml(contact)
   ];
 
-  if (payload.source) {
-    lines.push(`<b>Источник:</b> ${escapeHtml(payload.source)}`);
-  }
-
-  if (userAgent) {
-    lines.push(`<b>User-Agent:</b> ${escapeHtml(userAgent)}`);
+  if (payload.pageUrl || payload.pageTitle) {
+    lines.push('', `<b>Страница:</b> ${escapeHtml(payload.pageTitle?.trim() || '—')} (${escapeHtml(payload.pageUrl?.trim() || '—')})`);
   }
 
   lines.push(formatHistory(validHistory));
@@ -153,6 +125,7 @@ export async function POST(request: Request) {
   const messageText = lines.filter(Boolean).join('\n');
 
   if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+    console.error('Telegram env is not configured');
     return NextResponse.json({ ok: false, error: 'telegram_not_configured' }, { status: 500 });
   }
 
