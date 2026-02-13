@@ -15,7 +15,7 @@ const nav = [
 
 function PhoneIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-cyan-100" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 shrink-0 text-cyan-100" aria-hidden="true">
       <path d="M21 16.5V20a1 1 0 0 1-1.1 1A18.9 18.9 0 0 1 11.7 18a18.6 18.6 0 0 1-5.8-5.8A18.9 18.9 0 0 1 3 4.1 1 1 0 0 1 4 3h3.5a1 1 0 0 1 1 .9c.1.9.4 1.8.7 2.7a1 1 0 0 1-.2 1l-1.5 1.5a16 16 0 0 0 6.9 6.9l1.5-1.5a1 1 0 0 1 1-.2c.9.3 1.8.6 2.7.7a1 1 0 0 1 .9 1Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
@@ -57,15 +57,15 @@ export function Header() {
 
         <Link
           href="tel:+79031108467"
-          className="group rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-2.5 py-2 transition hover:bg-cyan-300/20 md:px-3"
+          className="group flex flex-col items-center justify-center rounded-xl border border-cyan-300/30 bg-cyan-300/10 px-2.5 py-2 transition hover:bg-cyan-300/20 md:px-3"
           aria-label="Позвонить в Sapphire LED"
         >
-          <p className="inline-flex items-center gap-2 text-xs font-medium text-cyan-100 sm:text-sm">
+          <p className="flex items-center justify-center gap-2 text-xs font-medium leading-tight text-cyan-100 sm:text-sm">
             <PhoneIcon />
-            <span className="hidden sm:inline">+7-903-110-84-67</span>
-            <span className="sm:hidden">Позвонить</span>
+            <span className="hidden leading-none sm:inline">+7-903-110-84-67</span>
+            <span className="leading-none sm:hidden">Позвонить</span>
           </p>
-          <p className="hidden text-[11px] text-slate-300 sm:block">Пн–Пт 9:00–18:00</p>
+          <p className="hidden text-[11px] leading-tight text-slate-300 sm:block">Пн–Пт 9:00–18:00</p>
         </Link>
 
         <nav className="flex w-full items-center justify-between gap-2 overflow-x-auto border-t border-white/10 pt-3 text-sm md:hidden">
