@@ -21,7 +21,7 @@ export function SeoLandingPage({ slug }: { slug: string }) {
         <div className="mt-4 space-y-4 text-slate-300">
           {page.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
           <Link href={{ pathname: '/contacts', query: { from: slug } }} className="rounded-xl bg-cyan-300 px-4 py-2 text-sm font-medium text-slate-900">Связаться с инженером</Link>
           <Link href="/catalog" className="rounded-xl border border-white/20 px-4 py-2 text-sm">Смотреть каталог</Link>
         </div>

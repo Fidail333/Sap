@@ -90,7 +90,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </div>
-            <div className="mt-8"><ProductContactButton productName={product.id} /></div>
+            <div className="mt-8 flex justify-center sm:block"><div className="w-full max-w-sm sm:max-w-none"><ProductContactButton productName={product.id} /></div></div>
           </div>
         </div>
       </Section>

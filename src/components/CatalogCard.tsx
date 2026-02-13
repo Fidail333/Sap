@@ -52,11 +52,11 @@ export function CatalogCard({ item }: { item: CatalogProductItem }) {
             </>
           )}
         </ul>
-        <div className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <Link href={`/products/${item.id}`} className="text-cyan-300">Подробнее</Link>
+        <div className="flex flex-col items-center gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <Link href={`/products/${item.id}`} className="text-cyan-300 self-center sm:self-auto">Подробнее</Link>
           <Link
             href={{ pathname: '/contacts', query: { product: contactQuery } }}
-            className="w-full rounded-xl bg-gradient-to-r from-cyan-300 to-sky-400 px-4 py-2.5 text-center font-medium text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 active:scale-[0.99] sm:w-auto"
+            className="w-full rounded-xl bg-gradient-to-r from-cyan-300 to-sky-400 px-4 py-2.5 text-center font-medium text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:brightness-110 active:scale-[0.99] sm:w-auto sm:self-auto"
           >
             Связаться с инженером
           </Link>
