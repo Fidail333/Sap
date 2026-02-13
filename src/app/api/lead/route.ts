@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createLead } from '@/lib/cms';
 
 type LeadHistoryItem = {
   role: 'user' | 'bot';
@@ -103,6 +104,21 @@ export async function POST(request: Request) {
   }
 
   const validHistory = Array.isArray(payload.history) ? payload.history.filter(isHistoryItem) : [];
+
+
+  const leadMessage = [
+    `Установка: ${payload.location?.trim() || '—'}`,
+    `Назначение: ${payload.purpose?.trim() || '—'}`,
+    `Размер: ${payload.size?.trim() || '—'}`,
+    `Сроки: ${payload.timeline?.trim() || '—'}`
+  ].join(' | ');
+
+  await createLead({
+    name: 'Заявка из чата Алсу',
+    contact,
+    message: leadMessage,
+    source: 'chat'
+  });
 
   const lines = [
     '<b>🟢 Новая заявка с сайта Sapphire LED</b>',
