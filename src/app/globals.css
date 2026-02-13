@@ -6,6 +6,8 @@
 
 body {
   @apply min-h-screen overflow-x-hidden bg-slate-950 text-slate-100 antialiased;
+  position: relative;
+  isolation: isolate;
   background-image: url('/visuals/site-bg.webp');
   background-size: cover;
   background-position: center top;
@@ -17,8 +19,9 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: rgba(5, 11, 20, 0.75);
+  background: rgba(5, 11, 20, 0.5);
   pointer-events: none;
+  z-index: -1;
 }
 
 .scanline::after {
