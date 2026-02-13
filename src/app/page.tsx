@@ -141,7 +141,7 @@ export default function Home() {
       </Section>
 
       <Section>
-        <div className="flex items-end justify-between gap-6"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/catalog" variant="secondary">Весь каталог</Button></div>
+        <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-end md:justify-between md:text-left"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/catalog" variant="secondary" className="self-center">Весь каталог</Button></div>
         <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0, 6).map((item) => <Reveal key={item.id}><CatalogCard item={item} /></Reveal>)}</div>
       </Section>
 
@@ -151,9 +151,9 @@ export default function Home() {
       </Section>
 
       <Section>
-        <div className="flex items-end justify-between gap-6">
+        <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-end md:justify-between md:text-left">
           <Reveal><h2 className="text-3xl font-semibold">Популярные направления</h2></Reveal>
-          <Button href="/led-ekrany" variant="secondary">Все направления</Button>
+          <Button href="/led-ekrany" variant="secondary" className="self-center">Все направления</Button>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[
@@ -227,9 +227,9 @@ export default function Home() {
       </Section>
 
       <Section>
-        <div className="flex items-end justify-between gap-6">
+        <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-end md:justify-between md:text-left">
           <Reveal><h2 className="text-3xl font-semibold">Новости и статьи</h2></Reveal>
-          <Button href="/blog" variant="secondary">Все материалы</Button>
+          <Button href="/blog" variant="secondary" className="self-center">Все материалы</Button>
         </div>
         <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">
           {blogPosts.slice(0, 6).map((item) => (
