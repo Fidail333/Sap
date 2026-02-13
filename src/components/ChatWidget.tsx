@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type ChatRole = 'user' | 'bot';
-type Step = 'location' | 'purpose' | 'size' | 'size-custom' | 'timeline' | 'contact' | 'done';
+type Step = 'location' | 'purpose' | 'size' | 'size-custom' | 'timeline' | 'contact' | 'submitted';
 
 type ChatMessage = {
   id: string;
@@ -24,9 +24,12 @@ type ChatState = {
   step: Step;
   messages: ChatMessage[];
   answers: Answers;
+  updatedAt: number;
+  submittedAt: number | null;
 };
 
 const STORAGE_KEY = 'sapphire-alsu-chat-state-v1';
+const SUBMITTED_TTL_MS = 20 * 60 * 1000;
 
 const faqEntries: Array<{ check: RegExp; reply: string }> = [
   {
@@ -51,7 +54,7 @@ const faqEntries: Array<{ check: RegExp; reply: string }> = [
   }
 ];
 
-const stepOptions: Record<Exclude<Step, 'size-custom' | 'done'>, string[]> = {
+const stepOptions: Record<Exclude<Step, 'size-custom' | 'submitted'>, string[]> = {
   location: ['В помещении', 'На улице', 'Пока не знаю / нужна консультация'],
   purpose: ['Реклама', 'Информационное табло', 'Сцена / мероприятие', 'Диспетчерская / мониторинг', 'Другое'],
   size: ['До 3 метров', '3–6 метров', 'Более 6 метров', 'Указать точный размер'],
@@ -93,16 +96,76 @@ function getStepPrompt(step: Step) {
 const doneText =
   'Спасибо!\nЯ передала вашу заявку настоящему инженеру 👨‍💻\n\nСпециалист свяжется с вами в ближайшее рабочее время, чтобы:\n— уточнить детали\n— подобрать оптимальное LED-решение\n— рассчитать стоимость и сроки\n\nЕсли появятся дополнительные вопросы — можете написать их здесь.';
 
+const postSubmitPrompt = `${getTimeGreeting()} 👌 Я передала заявку инженеру. Что сделать дальше?`;
+
+const initialAnswers: Answers = { location: '', purpose: '', size: '', timeline: '', contact: '' };
+
+function createInitialState(): ChatState {
+  return {
+    step: 'location',
+    messages: initialMessages(),
+    answers: initialAnswers,
+    updatedAt: Date.now(),
+    submittedAt: null
+  };
+}
+
+function isKnownStep(step: unknown): step is Step {
+  return typeof step === 'string' && ['location', 'purpose', 'size', 'size-custom', 'timeline', 'contact', 'submitted'].includes(step);
+}
+
+function isValidAnswers(answers: unknown): answers is Answers {
+  if (!answers || typeof answers !== 'object') return false;
+  const maybeAnswers = answers as Record<keyof Answers, unknown>;
+  return (
+    typeof maybeAnswers.location === 'string' &&
+    typeof maybeAnswers.purpose === 'string' &&
+    typeof maybeAnswers.size === 'string' &&
+    typeof maybeAnswers.timeline === 'string' &&
+    typeof maybeAnswers.contact === 'string'
+  );
+}
+
+function hasCompletedLead(answers: Answers) {
+  return Boolean(answers.location && answers.purpose && answers.size && answers.timeline && answers.contact);
+}
+
+function normalizeState(raw: unknown): ChatState {
+  const fallback = createInitialState();
+  if (!raw || typeof raw !== 'object') return fallback;
+
+  const parsed = raw as Partial<ChatState>;
+  if (!isKnownStep(parsed.step) || !Array.isArray(parsed.messages) || !isValidAnswers(parsed.answers)) return fallback;
+
+  const validMessages = parsed.messages
+    .filter((item): item is ChatMessage => Boolean(item && typeof item.id === 'string' && (item.role === 'user' || item.role === 'bot') && typeof item.text === 'string'))
+    .slice(-50);
+
+  if (!validMessages.length) return fallback;
+
+  const updatedAt = typeof parsed.updatedAt === 'number' && Number.isFinite(parsed.updatedAt) ? parsed.updatedAt : Date.now();
+  const submittedAt = typeof parsed.submittedAt === 'number' && Number.isFinite(parsed.submittedAt) ? parsed.submittedAt : null;
+
+  if (parsed.step === 'submitted') {
+    const isStale = !submittedAt || Date.now() - submittedAt > SUBMITTED_TTL_MS;
+    if (isStale || !hasCompletedLead(parsed.answers)) return fallback;
+  }
+
+  return {
+    step: parsed.step,
+    messages: validMessages,
+    answers: parsed.answers,
+    updatedAt,
+    submittedAt
+  };
+}
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [contactInput, setContactInput] = useState('');
   const [contactError, setContactError] = useState('');
-  const [state, setState] = useState<ChatState>({
-    step: 'location',
-    messages: initialMessages(),
-    answers: { location: '', purpose: '', size: '', timeline: '', contact: '' }
-  });
+  const [state, setState] = useState<ChatState>(createInitialState);
   const [isTyping, setIsTyping] = useState(false);
   const [isSendingLead, setIsSendingLead] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
@@ -113,15 +176,20 @@ export function ChatWidget() {
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
-    const parsed = JSON.parse(raw) as ChatState;
-    if (parsed?.messages?.length && parsed.answers && parsed.step) {
-      setState(parsed);
-      setContactInput(parsed.answers.contact || '');
+
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      const normalized = normalizeState(parsed);
+      setState(normalized);
+      setContactInput(normalized.step === 'contact' ? normalized.answers.contact || '' : '');
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+      setState(createInitialState());
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, updatedAt: Date.now() }));
   }, [state]);
 
   useEffect(() => {
@@ -133,7 +201,7 @@ export function ChatWidget() {
     setIsTyping(true);
     const delay = 500 + Math.round(Math.random() * 700);
     typingTimerRef.current = setTimeout(() => {
-      setState((prev) => ({ ...prev, messages: [...prev.messages, { id: makeId(), role: 'bot', text }] }));
+      setState((prev) => ({ ...prev, updatedAt: Date.now(), messages: [...prev.messages, { id: makeId(), role: 'bot', text }] }));
       setIsTyping(false);
     }, delay);
   }, []);
@@ -145,12 +213,12 @@ export function ChatWidget() {
   }, []);
 
   const currentOptions = useMemo(() => {
-    if (state.step === 'done' || state.step === 'size-custom') return [];
+    if (state.step === 'submitted' || state.step === 'size-custom') return [];
     return stepOptions[state.step];
   }, [state.step]);
 
   const appendUserMessage = (text: string) => {
-    setState((prev) => ({ ...prev, messages: [...prev.messages, { id: makeId(), role: 'user', text }] }));
+    setState((prev) => ({ ...prev, updatedAt: Date.now(), messages: [...prev.messages, { id: makeId(), role: 'user', text }] }));
   };
 
   const handleFaq = (text: string) => {
@@ -163,7 +231,7 @@ export function ChatWidget() {
 
   const goNext = (field: keyof Answers, value: string, nextStep: Step) => {
     appendUserMessage(value);
-    setState((prev) => ({ ...prev, step: nextStep, answers: { ...prev.answers, [field]: value } }));
+    setState((prev) => ({ ...prev, updatedAt: Date.now(), step: nextStep, answers: { ...prev.answers, [field]: value } }));
     const prompt = getStepPrompt(nextStep);
     if (prompt) queueBotMessage(prompt);
   };
@@ -174,13 +242,32 @@ export function ChatWidget() {
     if (state.step === 'size') {
       if (option === 'Указать точный размер') {
         appendUserMessage(option);
-        setState((prev) => ({ ...prev, step: 'size-custom' }));
+        setState((prev) => ({ ...prev, updatedAt: Date.now(), step: 'size-custom' }));
         queueBotMessage('Напишите точный размер, например: 6×3 м.');
         return;
       }
       return goNext('size', option, 'timeline');
     }
     if (state.step === 'timeline') return goNext('timeline', option, 'contact');
+  };
+
+  const resetDialog = () => {
+    const initial = createInitialState();
+    setInput('');
+    setContactInput('');
+    setContactError('');
+    setIsTyping(false);
+    setIsSendingLead(false);
+    localStorage.removeItem(STORAGE_KEY);
+    setState(initial);
+  };
+
+  const startNewLead = () => {
+    const initial = createInitialState();
+    setInput('');
+    setContactInput('');
+    setContactError('');
+    setState(initial);
   };
 
   const submitLead = async (contact: string) => {
@@ -202,19 +289,22 @@ export function ChatWidget() {
         })
       });
 
-      if (!response.ok) {
-        queueBotMessage('Не удалось отправить заявку с первого раза. Попробуйте ещё раз через минуту — я всё передам инженеру.');
+      const result = (await response.json().catch(() => null)) as { ok?: boolean } | null;
+      if (!response.ok || !result?.ok) {
+        queueBotMessage('Не удалось отправить заявку с первого раза. Давайте попробуем ещё раз — нажмите «Передать инженеру».');
         return;
       }
 
       setState((prev) => ({
         ...prev,
-        step: 'done',
+        step: 'submitted',
+        updatedAt: Date.now(),
+        submittedAt: Date.now(),
         answers: { ...prev.answers, contact },
-        messages: [...prev.messages, { id: makeId(), role: 'bot', text: doneText }]
+        messages: [...prev.messages, { id: makeId(), role: 'bot', text: doneText }, { id: makeId(), role: 'bot', text: postSubmitPrompt }]
       }));
     } catch {
-      queueBotMessage('Сейчас есть техническая ошибка отправки. Попробуйте ещё раз — заявка будет передана инженеру.');
+      queueBotMessage('Сейчас есть техническая ошибка отправки. Попробуйте ещё раз — нажмите «Передать инженеру».');
     } finally {
       setIsSendingLead(false);
     }
@@ -230,7 +320,7 @@ export function ChatWidget() {
 
     setContactError('');
     appendUserMessage(value);
-    setState((prev) => ({ ...prev, answers: { ...prev.answers, contact: value } }));
+    setState((prev) => ({ ...prev, updatedAt: Date.now(), answers: { ...prev.answers, contact: value } }));
     await submitLead(value);
   };
 
@@ -241,6 +331,12 @@ export function ChatWidget() {
     setInput('');
 
     if (handleFaq(text)) return;
+
+    if (state.step === 'submitted') {
+      appendUserMessage(text);
+      queueBotMessage('Я на связи 👌 Выберите действие кнопкой ниже: новая заявка, продолжить уточнение или перейти в каталог.');
+      return;
+    }
 
     if (state.step === 'size-custom') {
       goNext('size', text, 'timeline');
@@ -346,6 +442,37 @@ export function ChatWidget() {
                   </button>
                 </form>
               ) : null}
+
+              {state.step === 'submitted' ? (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={startNewLead}
+                    className="rounded-full border border-cyan-300 bg-white px-3 py-1.5 text-xs text-cyan-800 transition hover:bg-cyan-50"
+                  >
+                    Создать новую заявку
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setState((prev) => ({ ...prev, updatedAt: Date.now(), step: 'contact' }));
+                      queueBotMessage('Хорошо, давайте уточним контакт или детали. Укажите удобный способ связи и отправим обновление инженеру.');
+                    }}
+                    className="rounded-full border border-cyan-300 bg-white px-3 py-1.5 text-xs text-cyan-800 transition hover:bg-cyan-50"
+                  >
+                    Продолжить уточнение
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window !== 'undefined') window.location.href = '/catalog';
+                    }}
+                    className="rounded-full border border-cyan-300 bg-white px-3 py-1.5 text-xs text-cyan-800 transition hover:bg-cyan-50"
+                  >
+                    Перейти в каталог
+                  </button>
+                </div>
+              ) : null}
             </div>
 
             <form onSubmit={onTextSubmit} className="border-t border-slate-200 bg-white p-2.5">
@@ -365,6 +492,13 @@ export function ChatWidget() {
                 />
                 <button type="submit" className="rounded-full bg-cyan-500 px-3 py-2 text-sm text-white">
                   Отправить
+                </button>
+                <button
+                  type="button"
+                  onClick={resetDialog}
+                  className="rounded-full border border-slate-300 px-3 py-2 text-sm text-slate-700"
+                >
+                  Сбросить диалог
                 </button>
               </div>
             </form>
