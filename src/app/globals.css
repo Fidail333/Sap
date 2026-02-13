@@ -31,3 +31,22 @@ body {
   from { transform: translateY(-4%); }
   to { transform: translateY(4%); }
 }
+
+.partners-marquee-track {
+  animation: partners-marquee 52s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partners-marquee-track {
+    animation: none;
+  }
+}
+
+@keyframes partners-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
