@@ -157,17 +157,41 @@ export default function Home() {
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[
-            { href: '/led-ekrany', label: 'LED-экраны' },
-            { href: '/ulichnye-led-ekrany', label: 'Уличные LED-экраны' },
-            { href: '/reklamnye-led-ekrany', label: 'Рекламные LED-экраны' },
-            { href: '/bolshie-led-ekrany', label: 'Большие LED-экраны' },
-            { href: '/indoor-led-ekrany', label: 'LED-экраны для помещений' },
-            { href: '/outdoor-led-ekrany', label: 'Outdoor LED-экраны' }
+            {
+              href: '/led-ekrany',
+              label: 'LED-экраны',
+              description: 'Инженерный подбор LED-экранов под задачу: формат, шаг пикселя, яркость, условия эксплуатации и бюджет проекта.'
+            },
+            {
+              href: '/ulichnye-led-ekrany',
+              label: 'Уличные LED-экраны',
+              description: 'Решения для городской среды: фасады, витрины и архитектурные поверхности с акцентом на дизайн и комфортную дистанцию просмотра.'
+            },
+            {
+              href: '/reklamnye-led-ekrany',
+              label: 'Рекламные LED-экраны',
+              description: 'Digital-экраны для рекламы и промо-контента с высокой заметностью, гибким управлением и стабильной работой 24/7.'
+            },
+            {
+              href: '/bolshie-led-ekrany',
+              label: 'Большие LED-экраны',
+              description: 'Крупноформатные экраны и видеостены для арен, сцен и массовых мероприятий, где важны масштаб и равномерность изображения.'
+            },
+            {
+              href: '/indoor-led-ekrany',
+              label: 'LED-экраны для помещений',
+              description: 'Indoor и fine-pitch решения для офисов, шоурумов и диспетчерских с приоритетом на детализацию и цветопередачу.'
+            },
+            {
+              href: '/outdoor-led-ekrany',
+              label: 'Outdoor LED-экраны',
+              description: 'Наружные экраны для стадионов, трасс и придорожных конструкций с максимальной яркостью и повышенной защитой от среды.'
+            }
           ].map((item) => (
             <Reveal key={item.href}>
               <Card>
                 <h3 className="text-lg font-semibold">{item.label}</h3>
-                <p className="mt-2 text-sm text-slate-300">Коммерческие и инженерные рекомендации для выбора LED-экрана под задачу.</p>
+                <p className="mt-2 text-sm text-slate-300">{item.description}</p>
                 <Button href={item.href} variant="secondary" className="mt-4">Перейти</Button>
               </Card>
             </Reveal>
