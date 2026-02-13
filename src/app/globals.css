@@ -6,9 +6,19 @@
 
 body {
   @apply min-h-screen overflow-x-hidden bg-slate-950 text-slate-100 antialiased;
-  background-image: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.18), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.16), transparent 35%),
-    linear-gradient(180deg, #060a16, #04060e 55%);
+  background-image: url('/visuals/site-bg.webp');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 11, 20, 0.75);
+  pointer-events: none;
 }
 
 .scanline::after {
