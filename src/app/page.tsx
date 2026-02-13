@@ -18,32 +18,32 @@ const solutions = [
   {
     title: 'Рекламные фасады и билборды',
     text: 'Высокая яркость и устойчивость к внешней среде для стабильной видимости контента в городском потоке.',
-    image: '/visuals/solutions/outdoor-facades.svg'
+    image: '/visuals/Рекламные фасады.jpg'
   },
   {
     title: 'Информационные табло и диспетчерские',
     text: 'Надёжные indoor-панели для круглосуточной работы, визуального контроля и отображения критичных данных.',
-    image: '/visuals/solutions/dispatch-boards.svg'
+    image: '/visuals/Информационное табло.jpg'
   },
   {
     title: 'Сценические экраны и ивенты',
     text: 'Модульные сборки с удобным монтажом для концертных площадок, презентаций и событийных форматов.',
-    image: '/visuals/solutions/stage-events.svg'
+    image: '/visuals/Сценические экраны.jpg'
   },
   {
     title: 'Спортивные объекты и арены',
     text: 'Контрастная картинка для трибун и арен, корректная читаемость и динамичный видеоконтент.',
-    image: '/visuals/solutions/sports-arenas.svg'
+    image: '/visuals/Спортивные объекты.jpg'
   },
   {
     title: 'Ритейл и витрины',
     text: 'Fine-pitch решения для брендинга, товарных акцентов и эмоциональной подачи промо в торговых пространствах.',
-    image: '/visuals/solutions/retail-showcases.svg'
+    image: '/visuals/витрины.jpg'
   },
   {
     title: 'Корпоративные пространства и шоурумы',
     text: 'LED-системы для лобби, переговорных и демонстрационных зон с акцентом на стиль и детализацию.',
-    image: '/visuals/solutions/corporate-showrooms.svg'
+    image: '/visuals/корпоративные пространства.jpg'
   }
 ];
 
