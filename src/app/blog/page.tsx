@@ -5,7 +5,9 @@ import { JsonLd } from '@/components/JsonLd';
 import { Badge } from '@/components/ui/Badge';
 import { Section } from '@/components/ui/Section';
 import { getPublishedBlogEntries } from '@/lib/cms';
-import { articleSchema, buildMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = buildMetadata('Материалы | Sapphire LED', 'Новости и статьи о LED-модулях, монтаже и эксплуатации экранов.', '/blog');
@@ -15,7 +17,19 @@ export default async function BlogPage() {
 
   return (
     <main>
-      <JsonLd data={blogPosts.map((post) => articleSchema({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, image: post.image }))} />
+      <JsonLd
+        data={blogPosts.map((post) => ({
+          '@context': 'https://schema.org',
+          '@type': post.type === 'Новости' ? 'NewsArticle' : 'Article',
+          headline: post.title,
+          description: post.excerpt,
+          image: `${siteUrl}${post.image}`,
+          datePublished: post.datePublished,
+          dateModified: post.dateModified,
+          author: { '@type': 'Organization', name: 'Sapphire LED' },
+          mainEntityOfPage: `${siteUrl}/blog/${post.slug}`
+        }))}
+      />
       <Section>
         <h1 className="text-3xl font-semibold sm:text-4xl">Материалы: новости и статьи</h1>
         <p className="mt-3 max-w-3xl text-slate-300">Подборка практических материалов по LED-технологиям, проектированию, монтажу и обслуживанию экранов.</p>
@@ -24,7 +38,7 @@ export default async function BlogPage() {
             <article key={post.slug} className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
               <Link href={`/blog/${post.slug}`} className="block">
                 <div className="relative h-52 w-full">
-                  <Image src={post.image} alt={post.title} fill className="object-cover" />
+                  <Image src={post.image} alt={post.coverAlt} fill className="object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                 </div>
               </Link>

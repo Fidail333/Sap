@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Section } from '@/components/ui/Section';
 import { productsData } from '@/lib/content';
-import { blogPosts } from '@/data/blog';
+import { getPublishedBlogEntries } from '@/lib/cms';
 import { buildMetadata, faqSchema } from '@/lib/seo';
 import { PartnersMarquee } from '@/components/sections/PartnersMarquee';
 
@@ -80,7 +80,9 @@ function AdvantageIcon({ label }: { label: string }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const blogPosts = await getPublishedBlogEntries();
+
   return (
     <main>
       <JsonLd data={faqSchema(faq.map(([question, answer]) => ({ question, answer })))} />
@@ -260,7 +262,7 @@ export default function Home() {
             <Reveal key={item.slug}>
               <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
                 <div className="relative h-40 w-full">
-                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
+                  <Image src={item.image} alt={item.coverAlt} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
                   <p className="text-xs text-cyan-300">{item.type}</p>
