@@ -1,0 +1,33 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg5" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#0a1022"/>
+    <stop offset="1" stop-color="#020617"/>
+  </linearGradient>
+  <radialGradient id="glowA5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(650 350) rotate(20) scale(460 300)">
+    <stop stop-color="#0ea5e9" stop-opacity="0.42"/>
+    <stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glowB5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(975 550) rotate(-15) scale(500 330)">
+    <stop stop-color="#67e8f9" stop-opacity="0.35"/>
+    <stop offset="1" stop-color="#67e8f9" stop-opacity="0"/>
+  </radialGradient>
+  <pattern id="grid5" width="64" height="64" patternUnits="userSpaceOnUse">
+    <path d="M64 0H0V64" stroke="#38bdf8" stroke-opacity="0.08"/>
+  </pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#bg5)"/>
+<rect width="1600" height="900" fill="url(#grid5)"/>
+<rect width="1600" height="900" fill="url(#glowA5)"/>
+<rect width="1600" height="900" fill="url(#glowB5)"/>
+<g opacity="0.45">
+  <path d="M0 690C260 610 420 810 760 660C1040 570 1300 760 1600 600" stroke="#38bdf8" stroke-opacity="0.45" stroke-width="2"/>
+  <path d="M0 720C320 590 560 820 920 690C1180 570 1400 740 1600 590" stroke="#22d3ee" stroke-opacity="0.4" stroke-width="2"/>
+</g>
+<g opacity="0.3">
+  <circle cx="730" cy="395" r="2.5" fill="#67e8f9"/>
+  <circle cx="670" cy="400" r="2" fill="#93c5fd"/>
+  <circle cx="1035" cy="330" r="2.2" fill="#67e8f9"/>
+  <circle cx="1205" cy="450" r="2" fill="#38bdf8"/>
+</g>
+</svg>
