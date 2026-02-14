@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CatalogCard } from '@/components/CatalogCard';
 import { JsonLd } from '@/components/JsonLd';
 import { Reveal } from '@/components/Reveal';
@@ -48,12 +49,54 @@ const solutions = [
 ];
 
 const advantages = [
-  { title: 'Подбор шага пикселя под задачу', text: 'Согласовываем плотность пикселя под дистанцию просмотра, контент и размер экрана, чтобы избежать переплаты.', icon: 'P' },
-  { title: 'Технологии COB/GOB для защиты и детализации', text: 'Подбираем платформу модуля в зависимости от сценария эксплуатации и требований к визуальному качеству.', icon: 'C' },
-  { title: '3840 Hz для камер и трансляций', text: 'Решения с повышенной частотой обновления помогают убрать мерцание в кадре и улучшают съёмку контента.', icon: 'Hz' },
-  { title: 'Комплектация и совместимость', text: 'Проверяем базовую совместимость модулей, питания и управляющей части ещё до поставки.', icon: '✓' },
-  { title: 'Инженерная поддержка и консультации', text: 'Помогаем на этапе расчёта, выбора серии и технических вопросов запуска системы.', icon: 'i' },
-  { title: 'Склад, логистика и оперативная отгрузка', text: 'Держим в фокусе актуальные складские позиции, чтобы ускорять комплектацию типовых конфигураций.', icon: 'S' }
+  {
+    title: 'Подбор шага пикселя под задачу',
+    text: 'Подбираем шаг пикселя под дистанцию и контент — без переплаты и без потери детализации.',
+    icon: 'grid',
+    tag: 'Точный расчет',
+    cta: 'Подобрать модуль',
+    href: '/catalog'
+  },
+  {
+    title: 'Технологии COB/GOB для защиты и детализации',
+    text: 'COB/GOB усиливают защиту поверхности — меньше повреждений и выше ресурс экрана.',
+    icon: 'shield',
+    tag: 'Повышенная защита',
+    cta: 'Сравнить технологии',
+    href: '/led-ekrany'
+  },
+  {
+    title: '3840 Hz для камер и трансляций',
+    text: '3840 Hz снижает мерцание в кадре — стабильная картинка для съёмки и эфира.',
+    icon: 'wave',
+    tag: 'Broadcast-ready',
+    cta: 'Для трансляций',
+    href: '/resheniya'
+  },
+  {
+    title: 'Комплектация и совместимость',
+    text: 'Проверяем совместимость модулей, питания и управления заранее — без задержек на запуске.',
+    icon: 'checklist',
+    tag: 'Без рисков',
+    cta: 'Проверить совместимость',
+    href: '/contacts'
+  },
+  {
+    title: 'Инженерная поддержка и консультации',
+    text: 'Сопровождаем от расчёта до старта — решение быстрее проходит путь до рабочего состояния.',
+    icon: 'headset',
+    tag: 'Экспертная команда',
+    cta: 'Задать вопрос инженеру',
+    href: '/contacts'
+  },
+  {
+    title: 'Склад, логистика и оперативная отгрузка',
+    text: 'Координируем склад и логистику — сокращаем сроки поставки типовых конфигураций.',
+    icon: 'truck',
+    tag: 'Быстрая отгрузка',
+    cta: 'Уточнить сроки',
+    href: '/contacts'
+  }
 ];
 
 const process = ['Бриф и аудит площадки', 'Подбор серии и пилотный расчет', 'Производство, поставка, калибровка', 'Монтаж, запуск и сервис'];
@@ -72,10 +115,51 @@ const faq = [
 ];
 
 
-function AdvantageIcon({ label }: { label: string }) {
+function AdvantageIcon({ type }: { type: string }) {
+  const icons: Record<string, JSX.Element> = {
+    grid: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+      </svg>
+    ),
+    shield: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M12 3l7 3v5c0 4.5-2.8 7.8-7 10-4.2-2.2-7-5.5-7-10V6l7-3z" />
+        <path d="M9.5 11.8l1.7 1.7 3.3-3.3" />
+      </svg>
+    ),
+    wave: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <rect x="3" y="5" width="14" height="14" rx="2" />
+        <path d="M8 12h4M6 9h2M6 15h2M19 8v8M22 10v4" />
+      </svg>
+    ),
+    checklist: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M14 4h6v16H4V4h6" />
+        <path d="M9 4h6v3H9zM8 12l1.5 1.5L12 11M8 17l1.5 1.5L12 16M14 12h4M14 17h4" />
+      </svg>
+    ),
+    headset: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M4 13a8 8 0 0116 0" />
+        <rect x="3" y="12" width="4" height="7" rx="1" />
+        <rect x="17" y="12" width="4" height="7" rx="1" />
+        <path d="M17 20a3 3 0 01-3 3h-2" />
+      </svg>
+    ),
+    truck: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M3 6h11v9H3zM14 9h4l3 3v3h-7z" />
+        <circle cx="7" cy="18" r="2" />
+        <circle cx="17" cy="18" r="2" />
+      </svg>
+    )
+  };
+
   return (
-    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-cyan-300/40 bg-cyan-300/10 text-sm font-semibold text-cyan-200" aria-hidden="true">
-      {label}
+    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-300/40 bg-cyan-300/10 text-cyan-200 transition-transform duration-300 group-hover:scale-[1.02]" aria-hidden="true">
+      {icons[type]}
     </span>
   );
 }
@@ -129,13 +213,19 @@ export default async function Home() {
 
       <Section>
         <Reveal><h2 className="text-3xl font-semibold">Преимущества</h2></Reveal>
-        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid items-stretch gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-3">
           {advantages.map((item) => (
-            <Reveal key={item.title}>
-              <Card>
-                <AdvantageIcon label={item.icon} />
-                <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300">{item.text}</p>
+            <Reveal key={item.title} className="h-full">
+              <Card className="group flex h-full flex-col border-cyan-200/20 bg-slate-900/70 transition duration-300 hover:border-cyan-300/40 hover:bg-slate-900/85 hover:shadow-[0_0_28px_rgba(34,211,238,0.12)]">
+                <div className="flex items-center justify-between gap-3">
+                  <AdvantageIcon type={item.icon} />
+                  <span className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-xs font-medium text-cyan-100">{item.tag}</span>
+                </div>
+                <h3 className="mt-4 line-clamp-2 text-lg font-semibold leading-tight">{item.title}</h3>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-300">{item.text}</p>
+                <Link href={item.href} className="mt-auto inline-flex pt-4 text-sm font-medium text-cyan-200 decoration-cyan-300/70 underline-offset-4 transition hover:text-cyan-100 hover:underline group-hover:underline">
+                  {item.cta}
+                </Link>
               </Card>
             </Reveal>
           ))}
