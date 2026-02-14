@@ -127,3 +127,27 @@ body::after {
   overflow: hidden;
   align-content: flex-start;
 }
+
+.popular-directions-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.popular-directions-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.popular-directions-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 18px;
+}
+
+.popular-directions-button {
+  margin-top: auto;
+}
