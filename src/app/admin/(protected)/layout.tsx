@@ -1,5 +1,3 @@
-export const runtime = 'nodejs';
-
 import { redirect } from 'next/navigation';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
 

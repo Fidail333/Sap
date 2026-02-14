@@ -1,5 +1,3 @@
-export const runtime = 'nodejs';
-
 import { NextResponse } from 'next/server';
 import { clearAdminSessionCookie } from '@/lib/admin-auth';
 

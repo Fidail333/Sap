@@ -3,31 +3,22 @@ import { cookies } from 'next/headers';
 
 const ADMIN_COOKIE = 'sap_admin_session';
 
-function getAdminSecret() {
-  return process.env.ADMIN_TOKEN || process.env.ADMIN_PASSWORD || '';
-}
-
-function sessionHash(secret: string) {
-  return crypto.createHash('sha256').update(secret).digest('hex');
+function sessionHash(password: string) {
+  return crypto.createHash('sha256').update(password).digest('hex');
 }
 
 export function isAdminAuthenticated() {
-  const secret = getAdminSecret();
-  if (!secret) return false;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!password) return false;
   const token = cookies().get(ADMIN_COOKIE)?.value;
-  return token === sessionHash(secret);
-}
-
-export function verifyAdminToken(inputToken: string) {
-  const secret = getAdminSecret();
-  return Boolean(secret && inputToken && inputToken === secret);
+  return token === sessionHash(password);
 }
 
 export function setAdminSessionCookie() {
-  const secret = getAdminSecret();
-  if (!secret) return false;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!password) return false;
 
-  cookies().set(ADMIN_COOKIE, sessionHash(secret), {
+  cookies().set(ADMIN_COOKIE, sessionHash(password), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',

@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import Image from 'next/image';
 import { JsonLd } from '@/components/JsonLd';
 import { Section } from '@/components/ui/Section';
 import { ProductsCatalog } from '@/components/products/ProductsCatalog';
 import { displayProductsData, moduleProductsData, productsData } from '@/lib/content';
+import { getPublishedAdminProducts } from '@/lib/cms';
 import { buildMetadata, productListSchema } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = buildMetadata('Каталог LED-экранов и модулей | Sapphire LED', 'Каталог LED-экранов: уличные, indoor, рекламные и большие решения для бизнеса и объектов в РФ.', '/catalog');
 
 export default async function CatalogPage() {
+  const adminProducts = await getPublishedAdminProducts();
 
   return (
     <main>
@@ -25,6 +28,22 @@ export default async function CatalogPage() {
           <ProductsCatalog modules={moduleProductsData} displays={displayProductsData} />
         </Suspense>
       </Section>
-          </main>
+      {adminProducts.length > 0 ? (
+        <Section>
+          <h2 className="text-2xl font-semibold">Товары из админки</h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {adminProducts.map((item) => (
+              <article key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+                <div className="relative h-44"><Image src={item.image} alt={item.title} fill className="object-cover" /></div>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm text-slate-300">{item.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+    </main>
   );
 }
