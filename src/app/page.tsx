@@ -82,6 +82,56 @@ const faq = [
   ['Можно ли масштабировать экран после запуска?', 'Да, при корректно заложенной архитектуре систему можно расширять секциями. Важно заранее предусмотреть резерв по питанию и управлению, чтобы масштабирование прошло без перестройки узлов.']
 ];
 
+type DirectionKey = 'led' | 'street' | 'ads' | 'stage' | 'indoor' | 'outdoor';
+
+const directionFeaturesFallback: Record<DirectionKey, string[]> = {
+  led: ['Расчёт шага пикселя', 'Яркость под площадку', 'Пусконаладка и сервис'],
+  street: ['IP-защита и климат', 'Читаемость при солнце', 'Надёжные фасадные кейсы'],
+  ads: ['CMS и плейлисты', 'Сценарии под трафик', 'Монетизация контента'],
+  stage: ['Бесшовные видеостены', 'Синхрон для событий', 'Высокая равномерность'],
+  indoor: ['Fine-pitch детализация', 'Точная цветопередача', 'Низкий уровень шума'],
+  outdoor: ['Максимальная яркость', 'Усиленный корпус', 'Стабильная работа 24/7']
+};
+
+const directions: Array<{ key: DirectionKey; href: string; label: string; description: string; features?: string[] }> = [
+  {
+    key: 'led',
+    href: '/led-ekrany',
+    label: 'LED-экраны',
+    description: 'Инженерный подбор LED-экранов под задачу: формат, шаг пикселя, яркость, условия эксплуатации и бюджет проекта.'
+  },
+  {
+    key: 'street',
+    href: '/ulichnye-led-ekrany',
+    label: 'Уличные LED-экраны',
+    description: 'Решения для городской среды: фасады, витрины и архитектурные поверхности с акцентом на дизайн и комфортную дистанцию просмотра.'
+  },
+  {
+    key: 'ads',
+    href: '/reklamnye-led-ekrany',
+    label: 'Рекламные LED-экраны',
+    description: 'Digital-экраны для рекламы и промо-контента с высокой заметностью, гибким управлением и стабильной работой 24/7.'
+  },
+  {
+    key: 'stage',
+    href: '/bolshie-led-ekrany',
+    label: 'Большие LED-экраны',
+    description: 'Крупноформатные экраны и видеостены для арен, сцен и массовых мероприятий, где важны масштаб и равномерность изображения.'
+  },
+  {
+    key: 'indoor',
+    href: '/indoor-led-ekrany',
+    label: 'LED-экраны для помещений',
+    description: 'Indoor и fine-pitch решения для офисов, шоурумов и диспетчерских с приоритетом на детализацию и цветопередачу.'
+  },
+  {
+    key: 'outdoor',
+    href: '/outdoor-led-ekrany',
+    label: 'Outdoor LED-экраны',
+    description: 'Наружные экраны для стадионов, трасс и придорожных конструкций с максимальной яркостью и повышенной защитой от среды.'
+  }
+];
+
 
 function AdvantageIcon({ type }: { type: string }) {
   const icons: Record<string, JSX.Element> = {
@@ -128,6 +178,25 @@ function AdvantageIcon({ type }: { type: string }) {
   return (
     <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-300/40 bg-cyan-300/10 text-cyan-200 transition-transform duration-300 group-hover:scale-[1.02]" aria-hidden="true">
       {icons[type]}
+    </span>
+  );
+}
+
+function DirectionIcon({ type }: { type: DirectionKey }) {
+  const icons: Record<DirectionKey, JSX.Element> = {
+    led: <path d="M5 3h14v4H5zM7 9h10v12H7zM10 12h4" />,
+    street: <path d="M4 20h16M8 20V9m8 11V6M6 9h4M14 6h4" />,
+    ads: <path d="M4 7h16v10H4zM8 17v3m8-3v3M8 12h8" />,
+    stage: <path d="M3 18h18M5 18V9l7-4 7 4v9M12 9v9" />,
+    indoor: <path d="M4 19h16V5H4zM9 5v14M4 11h16" />,
+    outdoor: <path d="M6 18h12M8 18V6l4-2 4 2v12M12 10v4" />
+  };
+
+  return (
+    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-cyan-300/30 bg-cyan-300/10 text-cyan-300" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+        {icons[type]}
+      </svg>
     </span>
   );
 }
@@ -201,47 +270,32 @@ export default async function Home() {
           <Reveal><h2 className="text-3xl font-semibold">Популярные направления</h2></Reveal>
           <Button href="/led-ekrany" variant="secondary" className="self-center">Все направления</Button>
         </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {[
-            {
-              href: '/led-ekrany',
-              label: 'LED-экраны',
-              description: 'Инженерный подбор LED-экранов под задачу: формат, шаг пикселя, яркость, условия эксплуатации и бюджет проекта.'
-            },
-            {
-              href: '/ulichnye-led-ekrany',
-              label: 'Уличные LED-экраны',
-              description: 'Решения для городской среды: фасады, витрины и архитектурные поверхности с акцентом на дизайн и комфортную дистанцию просмотра.'
-            },
-            {
-              href: '/reklamnye-led-ekrany',
-              label: 'Рекламные LED-экраны',
-              description: 'Digital-экраны для рекламы и промо-контента с высокой заметностью, гибким управлением и стабильной работой 24/7.'
-            },
-            {
-              href: '/bolshie-led-ekrany',
-              label: 'Большие LED-экраны',
-              description: 'Крупноформатные экраны и видеостены для арен, сцен и массовых мероприятий, где важны масштаб и равномерность изображения.'
-            },
-            {
-              href: '/indoor-led-ekrany',
-              label: 'LED-экраны для помещений',
-              description: 'Indoor и fine-pitch решения для офисов, шоурумов и диспетчерских с приоритетом на детализацию и цветопередачу.'
-            },
-            {
-              href: '/outdoor-led-ekrany',
-              label: 'Outdoor LED-экраны',
-              description: 'Наружные экраны для стадионов, трасс и придорожных конструкций с максимальной яркостью и повышенной защитой от среды.'
-            }
-          ].map((item) => (
-            <Reveal key={item.href}>
-              <Card>
-                <h3 className="text-lg font-semibold">{item.label}</h3>
-                <p className="mt-2 text-sm text-slate-300">{item.description}</p>
-                <Button href={item.href} variant="secondary" className="mt-4">Перейти</Button>
-              </Card>
-            </Reveal>
-          ))}
+        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 px-1 md:mt-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {directions.map((item) => {
+            const features = item.features ?? directionFeaturesFallback[item.key];
+
+            return (
+              <Reveal key={item.href} className="h-full">
+                <Card className="group flex h-full flex-col border-cyan-200/20 bg-slate-900/70 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.18)] motion-reduce:transform-none motion-reduce:transition-none">
+                  <div className="cardContent flex flex-1 flex-col">
+                    <div className="flex items-start gap-3">
+                      <DirectionIcon type={item.key} />
+                      <h3 className="text-lg font-semibold leading-tight">{item.label}</h3>
+                    </div>
+                    <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-slate-300 md:line-clamp-3">{item.description}</p>
+                    <ul className="mt-4 flex flex-wrap gap-2 text-xs text-cyan-100/90">
+                      {features.map((feature) => (
+                        <li key={feature} className="rounded-md border border-cyan-300/20 bg-cyan-300/10 px-2.5 py-1 leading-tight">
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button href={item.href} variant="secondary" className="mt-auto">Подробнее</Button>
+                </Card>
+              </Reveal>
+            );
+          })}
         </div>
       </Section>
 
