@@ -93,39 +93,54 @@ const directionFeaturesFallback: Record<DirectionKey, string[]> = {
   outdoor: ['Максимальная яркость', 'Усиленный корпус', 'Стабильная работа 24/7']
 };
 
-const directions: Array<{ key: DirectionKey; href: string; label: string; description: string; features?: string[] }> = [
+const ctaBySlug: Record<string, string> = {
+  'led-ekrany': 'Подобрать экран',
+  'ulichnye-led-ekrany': 'Рассчитать Outdoor',
+  'reklamnye-led-ekrany': 'Для рекламы',
+  'bolshie-led-ekrany': 'Для мероприятий',
+  'led-ekrany-dlya-pomesheniy': 'Для помещений',
+  'outdoor-led-ekrany': 'Смотреть Outdoor'
+};
+
+const directions: Array<{ key: DirectionKey; slug: string; href: string; label: string; description: string; features?: string[] }> = [
   {
     key: 'led',
+    slug: 'led-ekrany',
     href: '/led-ekrany',
     label: 'LED-экраны',
     description: 'Инженерный подбор LED-экранов под задачу: формат, шаг пикселя, яркость, условия эксплуатации и бюджет проекта.'
   },
   {
     key: 'street',
+    slug: 'ulichnye-led-ekrany',
     href: '/ulichnye-led-ekrany',
     label: 'Уличные LED-экраны',
     description: 'Решения для городской среды: фасады, витрины и архитектурные поверхности с акцентом на дизайн и комфортную дистанцию просмотра.'
   },
   {
     key: 'ads',
+    slug: 'reklamnye-led-ekrany',
     href: '/reklamnye-led-ekrany',
     label: 'Рекламные LED-экраны',
     description: 'Digital-экраны для рекламы и промо-контента с высокой заметностью, гибким управлением и стабильной работой 24/7.'
   },
   {
     key: 'stage',
+    slug: 'bolshie-led-ekrany',
     href: '/bolshie-led-ekrany',
     label: 'Большие LED-экраны',
     description: 'Крупноформатные экраны и видеостены для арен, сцен и массовых мероприятий, где важны масштаб и равномерность изображения.'
   },
   {
     key: 'indoor',
+    slug: 'led-ekrany-dlya-pomesheniy',
     href: '/indoor-led-ekrany',
     label: 'LED-экраны для помещений',
     description: 'Indoor и fine-pitch решения для офисов, шоурумов и диспетчерских с приоритетом на детализацию и цветопередачу.'
   },
   {
     key: 'outdoor',
+    slug: 'outdoor-led-ekrany',
     href: '/outdoor-led-ekrany',
     label: 'Outdoor LED-экраны',
     description: 'Наружные экраны для стадионов, трасс и придорожных конструкций с максимальной яркостью и повышенной защитой от среды.'
@@ -270,20 +285,21 @@ export default async function Home() {
           <Reveal><h2 className="text-3xl font-semibold">Популярные направления</h2></Reveal>
           <Button href="/led-ekrany" variant="secondary" className="self-center">Все направления</Button>
         </div>
-        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 px-1 md:mt-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <div className="mt-6 grid grid-cols-1 items-stretch gap-6 md:mt-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {directions.map((item) => {
             const features = item.features ?? directionFeaturesFallback[item.key];
+            const ctaText = ctaBySlug[item.slug] ?? 'Подробнее';
 
             return (
               <Reveal key={item.href} className="h-full">
-                <Card className="group flex h-full flex-col border-cyan-200/20 bg-slate-900/70 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.18)] motion-reduce:transform-none motion-reduce:transition-none">
-                  <div className="cardContent flex flex-1 flex-col">
+                <Card className="popular-directions-card group border-cyan-200/20 bg-slate-900/70 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.18)] motion-reduce:transform-none motion-reduce:transition-none">
+                  <div className="popular-directions-content">
                     <div className="flex items-start gap-3">
                       <DirectionIcon type={item.key} />
                       <h3 className="text-lg font-semibold leading-tight">{item.label}</h3>
                     </div>
                     <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-slate-300 md:line-clamp-3">{item.description}</p>
-                    <ul className="mt-4 flex flex-wrap gap-2 text-xs text-cyan-100/90">
+                    <ul className="popular-directions-tags text-xs text-cyan-100/90">
                       {features.map((feature) => (
                         <li key={feature} className="rounded-md border border-cyan-300/20 bg-cyan-300/10 px-2.5 py-1 leading-tight">
                           {feature}
@@ -291,7 +307,7 @@ export default async function Home() {
                       ))}
                     </ul>
                   </div>
-                  <Button href={item.href} variant="secondary" className="mt-auto">Подробнее</Button>
+                  <Button href={item.href} variant="secondary" className="popular-directions-button">{ctaText}</Button>
                 </Card>
               </Reveal>
             );
