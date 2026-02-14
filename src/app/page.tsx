@@ -144,7 +144,7 @@ export default async function Home() {
 
       <Section>
         <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-end md:justify-between md:text-left"><Reveal><h2 className="text-3xl font-semibold">Популярные серии</h2></Reveal><Button href="/catalog" variant="secondary" className="self-center">Весь каталог</Button></div>
-        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0, 6).map((item) => <Reveal key={item.id}><CatalogCard item={item} /></Reveal>)}</div>
+        <div className="mt-6 grid items-stretch gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">{productsData.slice(0, 6).map((item) => <Reveal key={item.id} className="h-full"><CatalogCard item={item} /></Reveal>)}</div>
       </Section>
 
       <Section>
