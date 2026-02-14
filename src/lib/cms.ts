@@ -124,9 +124,17 @@ export async function getPublishedBlogEntryBySlug(slug: string): Promise<BlogEnt
 
 export async function getAdminContent(kind: ContentKind) {
   const prisma = getPrismaClient();
+  const orderBy = { createdAt: 'desc' } as const;
 
   try {
-    return await getModel(kind, prisma).findMany({ orderBy: { createdAt: 'desc' } });
+    switch (kind) {
+      case 'article':
+        return await prisma.article.findMany({ orderBy });
+      case 'news':
+        return await prisma.news.findMany({ orderBy });
+      default:
+        return [];
+    }
   } catch (error) {
     console.error(`Failed SQL: getAdminContent(${kind})`, error);
     return [];
