@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { ADMIN_DEMO_CONTENT } from '@/lib/admin-demo-content';
 import { getPrismaClient } from '@/lib/prisma';
 import { ensureUniqueSlug, toSlug } from '@/lib/slug';
 
@@ -234,4 +235,18 @@ export async function createLead(data: { name: string; contact: string; message:
     console.error('Failed SQL: prisma.lead.create', error);
     throw new Error('Не удалось сохранить заявку');
   }
+}
+
+export async function bootstrapAdminDemoContent(): Promise<ServiceResult<{ created: number }>> {
+  let created = 0;
+
+  for (const item of ADMIN_DEMO_CONTENT) {
+    const result = await createAdminContent(item.kind, item.payload);
+    if (!result.ok && result.error?.code !== 'SLUG_EXISTS') {
+      return { ok: false, error: result.error };
+    }
+    if (result.ok) created += 1;
+  }
+
+  return { ok: true, data: { created } };
 }
