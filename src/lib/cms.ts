@@ -1,6 +1,6 @@
-import { blogPosts } from '@/data/blog';
-import { ensureDatabaseSchema } from '@/lib/db-init';
+import { Prisma } from '@prisma/client';
 import { getPrismaClient } from '@/lib/prisma';
+import { ensureUniqueSlug, toSlug } from '@/lib/slug';
 
 export type BlogEntry = {
   id: string;
@@ -12,45 +12,101 @@ export type BlogEntry = {
   content: string;
   image: string;
   tags: string[];
+  published: boolean;
 };
 
-function dbErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Unknown DB error';
+export type ContentKind = 'news' | 'article';
+
+export type ContentPayload = {
+  title: string;
+  slug?: string;
+  description?: string;
+  content: string;
+  image?: string;
+  published: boolean;
+};
+
+export type ServiceResult<T> = {
+  ok: boolean;
+  data?: T;
+  error?: {
+    code: string;
+    message: string;
+    details?: string;
+  };
+};
+
+function mapContent(
+  item: { id: string; title: string; slug: string; description: string | null; content: string; image: string | null; createdAt: Date; published: boolean },
+  type: 'Новости' | 'Статья'
+): BlogEntry {
+  return {
+    id: item.id,
+    type,
+    createdAt: item.createdAt,
+    title: item.title,
+    slug: item.slug,
+    excerpt: item.description ?? '',
+    content: item.content,
+    image: item.image ?? '/visuals/reference.png',
+    tags: [type],
+    published: item.published
+  };
+}
+
+function normalizePayload(payload: ContentPayload) {
+  return {
+    title: payload.title.trim(),
+    slug: payload.slug?.trim() || toSlug(payload.title),
+    description: payload.description?.trim() || null,
+    content: payload.content.trim(),
+    image: payload.image?.trim() || null,
+    published: Boolean(payload.published)
+  };
+}
+
+function toServiceError(error: unknown, fallback = 'Не удалось выполнить операцию'): ServiceResult<never>['error'] {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      return { code: 'SLUG_EXISTS', message: 'Slug уже используется', details: error.message };
+    }
+
+    return { code: error.code, message: 'Ошибка базы данных', details: error.message };
+  }
+
+  if (error instanceof Error) {
+    return { code: 'UNKNOWN', message: fallback, details: error.message };
+  }
+
+  return { code: 'UNKNOWN', message: fallback };
+}
+
+function getModel(kind: ContentKind, prisma: ReturnType<typeof getPrismaClient>) {
+  return kind === 'news' ? prisma.news : prisma.article;
 }
 
 export async function getPublishedBlogEntries(): Promise<BlogEntry[]> {
   const prisma = getPrismaClient();
 
-  if (!prisma) {
-    return blogPosts.map((item, index) => ({ ...item, id: item.slug, createdAt: new Date(Date.now() - index * 1000) }));
-  }
-
   try {
-    await ensureDatabaseSchema();
     const [news, articles] = await Promise.all([
       prisma.news.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' } }),
       prisma.article.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' } })
     ]);
 
-    return [
-      ...news.map((item) => mapContent(item, 'Новости')),
-      ...articles.map((item) => mapContent(item, 'Статья'))
-    ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return [...news.map((item) => mapContent(item, 'Новости')), ...articles.map((item) => mapContent(item, 'Статья'))].sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
   } catch (error) {
     console.error('Failed SQL: prisma.news.findMany / prisma.article.findMany', error);
-    return blogPosts.map((item, index) => ({ ...item, id: item.slug, createdAt: new Date(Date.now() - index * 1000) }));
+    return [];
   }
 }
 
 export async function getPublishedBlogEntryBySlug(slug: string): Promise<BlogEntry | null> {
   const prisma = getPrismaClient();
-  if (!prisma) {
-    const item = blogPosts.find((entry) => entry.slug === slug);
-    return item ? { ...item, id: item.slug, createdAt: new Date() } : null;
-  }
 
   try {
-    await ensureDatabaseSchema();
     const [news, article] = await Promise.all([
       prisma.news.findFirst({ where: { slug, published: true } }),
       prisma.article.findFirst({ where: { slug, published: true } })
@@ -61,137 +117,121 @@ export async function getPublishedBlogEntryBySlug(slug: string): Promise<BlogEnt
     return null;
   } catch (error) {
     console.error('Failed SQL: prisma.news.findFirst / prisma.article.findFirst', error);
-    const item = blogPosts.find((entry) => entry.slug === slug);
-    return item ? { ...item, id: item.slug, createdAt: new Date() } : null;
+    return null;
   }
 }
-
-export async function getPublishedAdminProducts() {
-  const prisma = getPrismaClient();
-  if (!prisma) return [] as Array<{ id: string; title: string; image: string; description: string }>;
-
-  try {
-    await ensureDatabaseSchema();
-    return await prisma.product.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' } });
-  } catch (error) {
-    console.error('Failed SQL: prisma.product.findMany', error);
-    return [] as Array<{ id: string; title: string; image: string; description: string }>;
-  }
-}
-
-function mapContent(item: { id: string; title: string; slug: string; description: string; content: string; image: string; createdAt: Date }, type: 'Новости' | 'Статья'): BlogEntry {
-  return {
-    id: item.id,
-    type,
-    createdAt: item.createdAt,
-    title: item.title,
-    slug: item.slug,
-    excerpt: item.description,
-    content: item.content,
-    image: item.image,
-    tags: [type]
-  };
-}
-
-export type ContentKind = 'news' | 'article' | 'product';
 
 export async function getAdminContent(kind: ContentKind) {
   const prisma = getPrismaClient();
-  if (!prisma) return [];
 
   try {
-    await ensureDatabaseSchema();
-    if (kind === 'news') return prisma.news.findMany({ orderBy: { createdAt: 'desc' } });
-    if (kind === 'article') return prisma.article.findMany({ orderBy: { createdAt: 'desc' } });
-    return prisma.product.findMany({ orderBy: { createdAt: 'desc' } });
+    return await getModel(kind, prisma).findMany({ orderBy: { createdAt: 'desc' } });
   } catch (error) {
     console.error(`Failed SQL: getAdminContent(${kind})`, error);
     return [];
   }
 }
 
-export async function createAdminContent(kind: ContentKind, data: { title: string; slug: string; description: string; content: string; image: string; published: boolean }) {
+export async function createAdminContent(kind: ContentKind, payload: ContentPayload): Promise<ServiceResult<{ id: string }>> {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is missing');
+  const normalized = normalizePayload(payload);
+
+  if (!normalized.title || !normalized.content) {
+    return { ok: false, error: { code: 'VALIDATION', message: 'Заполните заголовок и контент' } };
+  }
 
   try {
-    await ensureDatabaseSchema();
-    if (kind === 'news') return prisma.news.create({ data });
-    if (kind === 'article') return prisma.article.create({ data });
-    return prisma.product.create({ data });
+    const slug = await ensureUniqueSlug({
+      prisma,
+      kind,
+      slug: normalized.slug,
+      excludeId: undefined
+    });
+
+    const created = await getModel(kind, prisma).create({
+      data: {
+        title: normalized.title,
+        slug,
+        description: normalized.description,
+        content: normalized.content,
+        image: normalized.image,
+        published: normalized.published
+      }
+    });
+
+    return { ok: true, data: { id: created.id } };
   } catch (error) {
     console.error(`Failed SQL: createAdminContent(${kind})`, error);
-    throw new Error(dbErrorMessage(error));
+    return { ok: false, error: toServiceError(error, 'Не удалось создать запись') };
   }
 }
 
-export async function updateAdminContent(kind: ContentKind, id: string, data: { title: string; slug: string; description: string; content: string; image: string; published: boolean }) {
+export async function updateAdminContent(kind: ContentKind, id: string, payload: ContentPayload): Promise<ServiceResult<{ id: string }>> {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is missing');
+  const normalized = normalizePayload(payload);
+
+  if (!id) return { ok: false, error: { code: 'VALIDATION', message: 'Не указан ID записи' } };
 
   try {
-    await ensureDatabaseSchema();
-    if (kind === 'news') return prisma.news.update({ where: { id }, data });
-    if (kind === 'article') return prisma.article.update({ where: { id }, data });
-    return prisma.product.update({ where: { id }, data });
+    const slug = await ensureUniqueSlug({ prisma, kind, slug: normalized.slug, excludeId: id });
+
+    const updated = await getModel(kind, prisma).update({
+      where: { id },
+      data: {
+        title: normalized.title,
+        slug,
+        description: normalized.description,
+        content: normalized.content,
+        image: normalized.image,
+        published: normalized.published
+      }
+    });
+
+    return { ok: true, data: { id: updated.id } };
   } catch (error) {
     console.error(`Failed SQL: updateAdminContent(${kind})`, error);
-    throw new Error(dbErrorMessage(error));
+    return { ok: false, error: toServiceError(error, 'Не удалось обновить запись') };
   }
 }
 
-export async function deleteAdminContent(kind: ContentKind, id: string) {
+export async function deleteAdminContent(kind: ContentKind, id: string): Promise<ServiceResult<{ id: string }>> {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is missing');
 
   try {
-    await ensureDatabaseSchema();
-    if (kind === 'news') return prisma.news.delete({ where: { id } });
-    if (kind === 'article') return prisma.article.delete({ where: { id } });
-    return prisma.product.delete({ where: { id } });
+    const deleted = await getModel(kind, prisma).delete({ where: { id } });
+    return { ok: true, data: { id: deleted.id } };
   } catch (error) {
     console.error(`Failed SQL: deleteAdminContent(${kind})`, error);
-    throw new Error(dbErrorMessage(error));
+    return { ok: false, error: toServiceError(error, 'Не удалось удалить запись') };
   }
 }
 
 export async function getLeads() {
   const prisma = getPrismaClient();
-  if (!prisma) return [] as Array<{ id: string; name: string; contact: string; message: string; source: string; status: string; createdAt: Date }>;
-
   try {
-    await ensureDatabaseSchema();
     return prisma.lead.findMany({ orderBy: { createdAt: 'desc' } });
   } catch (error) {
     console.error('Failed SQL: prisma.lead.findMany', error);
-    return [] as Array<{ id: string; name: string; contact: string; message: string; source: string; status: string; createdAt: Date }>;
+    return [];
   }
 }
 
 export async function updateLeadStatus(id: string, status: 'new' | 'in_progress' | 'done') {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is missing');
-
   try {
-    await ensureDatabaseSchema();
-    return prisma.lead.update({ where: { id }, data: { status } });
+    await prisma.lead.update({ where: { id }, data: { status } });
   } catch (error) {
     console.error('Failed SQL: prisma.lead.update', error);
-    throw new Error(dbErrorMessage(error));
+    throw new Error('Не удалось обновить статус заявки');
   }
 }
 
 export async function createLead(data: { name: string; contact: string; message: string; source: 'chat' | 'form' | 'admin' }) {
   const prisma = getPrismaClient();
-  if (!prisma) {
-    throw new Error('DATABASE_URL is missing');
-  }
-
   try {
-    await ensureDatabaseSchema();
     return await prisma.lead.create({ data });
   } catch (error) {
     console.error('Failed SQL: prisma.lead.create', error);
-    throw new Error(dbErrorMessage(error));
+    throw new Error('Не удалось сохранить заявку');
   }
 }

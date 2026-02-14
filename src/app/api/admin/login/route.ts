@@ -1,11 +1,13 @@
+export const runtime = 'nodejs';
+
 import { NextResponse } from 'next/server';
-import { setAdminSessionCookie } from '@/lib/admin-auth';
+import { setAdminSessionCookie, verifyAdminToken } from '@/lib/admin-auth';
 
 export async function POST(request: Request) {
-  const data = await request.formData();
-  const password = String(data.get('password') || '');
+  const formData = await request.formData();
+  const token = String(formData.get('token') || formData.get('password') || '').trim();
 
-  if (!process.env.ADMIN_PASSWORD || password !== process.env.ADMIN_PASSWORD) {
+  if (!verifyAdminToken(token)) {
     return NextResponse.redirect(new URL('/admin/login?error=1', request.url));
   }
 

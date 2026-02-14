@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Section } from '@/components/ui/Section';
 import { productsData } from '@/lib/content';
-import { blogPosts } from '@/data/blog';
+import { getPublishedBlogEntries } from '@/lib/cms';
 import { buildMetadata, faqSchema } from '@/lib/seo';
 import { PartnersMarquee } from '@/components/sections/PartnersMarquee';
 
@@ -80,7 +80,8 @@ function AdvantageIcon({ label }: { label: string }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const blogPosts = await getPublishedBlogEntries();
   return (
     <main>
       <JsonLd data={faqSchema(faq.map(([question, answer]) => ({ question, answer })))} />
