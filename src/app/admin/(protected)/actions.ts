@@ -24,9 +24,10 @@ function redirectWithActionError(error: unknown) {
 
 export async function createContentAction(formData: FormData) {
   const payload = parseContentForm(formData);
+  const { kind, id: _id, ...data } = payload;
 
   try {
-    await createAdminContent(payload.kind, payload);
+    await createAdminContent(kind, data);
   } catch (error) {
     redirectWithActionError(error);
   }
@@ -39,9 +40,10 @@ export async function createContentAction(formData: FormData) {
 export async function updateContentAction(formData: FormData) {
   const payload = parseContentForm(formData);
   if (!payload.id) return;
+  const { id, kind, ...data } = payload;
 
   try {
-    await updateAdminContent(payload.kind, payload.id, payload);
+    await updateAdminContent(kind, id, data);
   } catch (error) {
     redirectWithActionError(error);
   }
