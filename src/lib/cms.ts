@@ -53,11 +53,10 @@ export async function getPublishedBlogEntries(): Promise<BlogEntry[]> {
 
 export async function getPublishedBlogEntryBySlug(slug: string): Promise<BlogEntry | null> {
   const prisma = getPrismaClient();
-  const staticItem = blogPosts.find((entry) => entry.slug === slug);
-  const staticEntry = staticItem ? { ...staticItem, id: staticItem.slug, createdAt: new Date(staticItem.datePublished) } : null;
 
   if (!prisma) {
-    return staticEntry;
+    const item = blogPosts.find((entry) => entry.slug === slug);
+    return item ? { ...item, id: item.slug, createdAt: new Date(item.datePublished) } : null;
   }
 
   try {
@@ -69,10 +68,12 @@ export async function getPublishedBlogEntryBySlug(slug: string): Promise<BlogEnt
 
     if (news) return mapContent(news, 'Новости');
     if (article) return mapContent(article, 'Статья');
-    return staticEntry;
+    const item = blogPosts.find((entry) => entry.slug === slug);
+    return item ? { ...item, id: item.slug, createdAt: new Date(item.datePublished) } : null;
   } catch (error) {
     console.error('Failed SQL: prisma.news.findFirst / prisma.article.findFirst', error);
-    return staticEntry;
+    const item = blogPosts.find((entry) => entry.slug === slug);
+    return item ? { ...item, id: item.slug, createdAt: new Date(item.datePublished) } : null;
   }
 }
 
