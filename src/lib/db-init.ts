@@ -44,12 +44,7 @@ async function runSchemaInit(prisma: RawPrismaClient) {
 }
 
 export async function ensureDatabaseSchema() {
-  const prisma = getPrismaClient() as RawPrismaClient | null;
-
-  if (!prisma) {
-    console.error('Database init skipped: Prisma client is not available. Check DATABASE_URL and Prisma setup.');
-    return;
-  }
+  const prisma = getPrismaClient() as RawPrismaClient;
 
   if (!initPromise) {
     initPromise = runSchemaInit(prisma).catch((error) => {
@@ -62,11 +57,7 @@ export async function ensureDatabaseSchema() {
 }
 
 export async function checkDatabaseHealth() {
-  const prisma = getPrismaClient() as RawPrismaClient | null;
-
-  if (!prisma) {
-    return { ok: false, error: 'DATABASE_URL is missing' };
-  }
+  const prisma = getPrismaClient() as RawPrismaClient;
 
   try {
     await ensureDatabaseSchema();

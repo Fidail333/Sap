@@ -1,54 +1,64 @@
-type PrismaClientLike = {
-  news: {
-    findMany: (args: unknown) => Promise<any[]>;
-    findFirst: (args: unknown) => Promise<any | null>;
-    create: (args: unknown) => Promise<any>;
-    update: (args: unknown) => Promise<any>;
-    delete: (args: unknown) => Promise<any>;
-  };
-  article: PrismaClientLike['news'];
-  product: PrismaClientLike['news'];
-  lead: PrismaClientLike['news'];
-};
+import { PrismaClient } from '@prisma/client';
 
 declare global {
   // eslint-disable-next-line no-var
-  var __prisma: PrismaClientLike | undefined;
+  var prisma: PrismaClient | undefined;
 }
 
 export function resolveDatabaseUrl() {
-  return process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || '';
+  const resolved = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || '';
+
+  let url = resolved.trim();
+
+  if (url.startsWith('psql ')) {
+    url = url.slice(5).trim();
+  }
+
+  if ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
+    url = url.slice(1, -1).trim();
+  }
+
+  return url;
 }
 
-function createPrismaClient() {
+function createPrismaClient(url: string) {
   try {
-    const required = eval('require')('@prisma/client') as { PrismaClient?: new (...args: any[]) => PrismaClientLike };
-    if (!required.PrismaClient) return null;
-    return new required.PrismaClient({ log: ['error'] });
-  } catch {
-    return null;
+    return new PrismaClient({
+      log: ['error'],
+      datasources: { db: { url } }
+    });
+  } catch (error) {
+    console.error('Prisma client initialization failed', error);
+    throw new Error('PrismaClient is not available. Check that @prisma/client is generated and bundled.');
   }
+}
+
+const singletonUrl = resolveDatabaseUrl();
+
+export const prisma = global.prisma ?? (singletonUrl ? createPrismaClient(singletonUrl) : undefined);
+
+if (process.env.NODE_ENV !== 'production' && prisma) {
+  global.prisma = prisma;
 }
 
 export function getPrismaClient() {
-  const databaseUrl = resolveDatabaseUrl();
+  const url = resolveDatabaseUrl();
 
-  if (!databaseUrl) {
-    console.error('DATABASE_URL is missing (checked DATABASE_URL, POSTGRES_URL, NEON_DATABASE_URL)');
-    return null;
-  }
-
-  if (!process.env.DATABASE_URL) {
-    process.env.DATABASE_URL = databaseUrl;
+  if (!url) {
+    throw new Error('DATABASE_URL is missing');
   }
 
   if (process.env.NODE_ENV === 'production') {
-    return createPrismaClient();
+    return createPrismaClient(url);
   }
 
-  if (!global.__prisma) {
-    global.__prisma = createPrismaClient() || undefined;
+  if (!global.prisma) {
+    global.prisma = createPrismaClient(url);
   }
 
-  return global.__prisma || null;
+  if (!global.prisma) {
+    throw new Error('PrismaClient is not available. Check that @prisma/client is generated and bundled.');
+  }
+
+  return global.prisma;
 }

@@ -4,11 +4,16 @@ import { checkDatabaseHealth } from '@/lib/db-init';
 export const runtime = 'nodejs';
 
 export async function GET() {
-  const health = await checkDatabaseHealth();
+  try {
+    const health = await checkDatabaseHealth();
 
-  if (!health.ok) {
-    return NextResponse.json({ ok: false, error: health.error || 'DATABASE_URL is missing' }, { status: 500 });
+    if (!health.ok) {
+      return NextResponse.json({ ok: false, error: health.error }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown DB error';
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
-
-  return NextResponse.json({ ok: true });
 }
