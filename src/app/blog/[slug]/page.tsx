@@ -6,18 +6,47 @@ import { JsonLd } from '@/components/JsonLd';
 import { Badge } from '@/components/ui/Badge';
 import { Section } from '@/components/ui/Section';
 import { getPublishedBlogEntryBySlug } from '@/lib/cms';
-import { articleSchema, buildMetadata } from '@/lib/seo';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getPublishedBlogEntryBySlug(params.slug);
-  if (!post) return buildMetadata('Материал не найден | Sapphire LED', 'Материал не найден.', '/blog');
-  return buildMetadata(`${post.title} | Sapphire LED`, post.excerpt, `/blog/${post.slug}`);
+  if (!post) {
+    return {
+      title: 'Материал не найден | Sapphire LED',
+      description: 'Материал не найден.',
+      alternates: { canonical: '/blog' }
+    };
+  }
+
+  return {
+    title: post.metaTitle,
+    description: post.metaDescription,
+    metadataBase: new URL(siteUrl),
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      title: post.metaTitle,
+      description: post.metaDescription,
+      url: `${siteUrl}/blog/${post.slug}`,
+      siteName: 'Sapphire LED',
+      type: 'article',
+      locale: 'ru_RU',
+      images: [{ url: post.image }]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.metaTitle,
+      description: post.metaDescription,
+      images: [post.image]
+    }
+  };
 }
 
 function renderContentBlocks(content: string) {
   return content.split('\n\n').map((block) => {
+    if (block.startsWith('### ')) return <h3 key={block} className="mt-7 text-xl font-semibold text-slate-100">{block.replace('### ', '')}</h3>;
     if (block.startsWith('## ')) return <h2 key={block} className="mt-8 text-2xl font-semibold text-slate-100">{block.replace('## ', '')}</h2>;
     if (block.startsWith('- ')) {
       return (
@@ -36,11 +65,23 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
     <main>
-      <JsonLd data={articleSchema({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, image: post.image })} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': post.type === 'Новости' ? 'NewsArticle' : 'Article',
+          headline: post.title,
+          description: post.excerpt,
+          image: `${siteUrl}${post.image}`,
+          datePublished: post.datePublished,
+          dateModified: post.dateModified,
+          author: { '@type': 'Organization', name: 'Sapphire LED' },
+          mainEntityOfPage: `${siteUrl}/blog/${post.slug}`
+        }}
+      />
       <Section>
         <article className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
           <div className="relative h-64 w-full md:h-80">
-            <Image src={post.image} alt={post.title} fill className="object-cover" priority />
+            <Image src={post.image} alt={post.coverAlt} fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
           </div>
           <div className="p-6 md:p-8">
