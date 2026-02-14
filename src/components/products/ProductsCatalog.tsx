@@ -221,7 +221,7 @@ export function ProductsCatalog({ modules, displays }: { modules: ModuleProductI
               </select>
             </label>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filtered.map((item) => <CatalogCard key={item.id} item={item} />)}
           </div>
         </div>
