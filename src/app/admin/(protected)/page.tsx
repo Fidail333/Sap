@@ -1,11 +1,16 @@
 export const runtime = 'nodejs';
 
-import { DatabaseHealthBanner } from '@/components/admin/DatabaseHealthBanner';
+import type { Prisma } from '@prisma/client';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { getAdminContent } from '@/lib/cms';
 
+type NewsRow = Prisma.NewsGetPayload<{}>;
+type ArticleRow = Prisma.ArticleGetPayload<{}>;
+
 export default async function AdminPage() {
-  const [news, articles] = await Promise.all([getAdminContent('news'), getAdminContent('article')]);
+  const [newsRaw, articlesRaw] = await Promise.all([getAdminContent('news'), getAdminContent('article')]);
+  const news = newsRaw as NewsRow[];
+  const articles = articlesRaw as ArticleRow[];
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
@@ -13,8 +18,16 @@ export default async function AdminPage() {
         <h1 className="text-3xl font-semibold">Content admin</h1>
         <form action="/api/admin/logout" method="post"><button type="submit" className="rounded-lg border border-white/20 px-3 py-2 text-sm">Выйти</button></form>
       </div>
-      <DatabaseHealthBanner />
-      <AdminDashboard initialNews={news.map((item) => ({ ...item, createdAt: item.createdAt.toISOString() }))} initialArticles={articles.map((item) => ({ ...item, createdAt: item.createdAt.toISOString() }))} />
+      <AdminDashboard
+        initialNews={news.map((item: NewsRow) => ({
+          ...item,
+          createdAt: item.createdAt.toISOString()
+        }))}
+        initialArticles={articles.map((item: ArticleRow) => ({
+          ...item,
+          createdAt: item.createdAt.toISOString()
+        }))}
+      />
     </main>
   );
 }
