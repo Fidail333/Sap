@@ -65,7 +65,7 @@ export async function checkDatabaseHealth() {
   const prisma = getPrismaClient() as RawPrismaClient | null;
 
   if (!prisma) {
-    return { ok: false, error: 'DATABASE_URL is not configured' };
+    return { ok: false, error: 'DATABASE_URL is missing' };
   }
 
   try {
