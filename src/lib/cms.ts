@@ -112,7 +112,7 @@ export async function getAdminContent(kind: ContentKind) {
 
 export async function createAdminContent(kind: ContentKind, data: { title: string; slug: string; description: string; content: string; image: string; published: boolean }) {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is not configured');
+  if (!prisma) throw new Error('DATABASE_URL is missing');
 
   try {
     await ensureDatabaseSchema();
@@ -127,7 +127,7 @@ export async function createAdminContent(kind: ContentKind, data: { title: strin
 
 export async function updateAdminContent(kind: ContentKind, id: string, data: { title: string; slug: string; description: string; content: string; image: string; published: boolean }) {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is not configured');
+  if (!prisma) throw new Error('DATABASE_URL is missing');
 
   try {
     await ensureDatabaseSchema();
@@ -142,7 +142,7 @@ export async function updateAdminContent(kind: ContentKind, id: string, data: { 
 
 export async function deleteAdminContent(kind: ContentKind, id: string) {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is not configured');
+  if (!prisma) throw new Error('DATABASE_URL is missing');
 
   try {
     await ensureDatabaseSchema();
@@ -170,7 +170,7 @@ export async function getLeads() {
 
 export async function updateLeadStatus(id: string, status: 'new' | 'in_progress' | 'done') {
   const prisma = getPrismaClient();
-  if (!prisma) throw new Error('DATABASE_URL is not configured');
+  if (!prisma) throw new Error('DATABASE_URL is missing');
 
   try {
     await ensureDatabaseSchema();
@@ -184,7 +184,7 @@ export async function updateLeadStatus(id: string, status: 'new' | 'in_progress'
 export async function createLead(data: { name: string; contact: string; message: string; source: 'chat' | 'form' | 'admin' }) {
   const prisma = getPrismaClient();
   if (!prisma) {
-    return null;
+    throw new Error('DATABASE_URL is missing');
   }
 
   try {
@@ -192,6 +192,6 @@ export async function createLead(data: { name: string; contact: string; message:
     return await prisma.lead.create({ data });
   } catch (error) {
     console.error('Failed SQL: prisma.lead.create', error);
-    return null;
+    throw new Error(dbErrorMessage(error));
   }
 }

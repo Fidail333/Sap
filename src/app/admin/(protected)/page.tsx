@@ -1,4 +1,5 @@
 import { ConfirmButton } from '@/components/admin/ConfirmButton';
+import { DatabaseHealthBanner } from '@/components/admin/DatabaseHealthBanner';
 import { createContentAction, deleteContentAction, updateContentAction, updateLeadStatusAction } from '@/app/admin/(protected)/actions';
 import { getAdminContent, getLeads } from '@/lib/cms';
 
@@ -57,6 +58,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: { err
         <form action="/api/admin/logout" method="post"><button type="submit" className="rounded-lg border border-white/20 px-3 py-2 text-sm">Выйти</button></form>
       </div>
       {errorMessage ? <p className="mt-4 rounded-lg border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">Ошибка: {errorMessage}</p> : null}
+      <DatabaseHealthBanner />
       <ContentBlock kind="news" title="Новости" items={news as ContentItem[]} />
       <ContentBlock kind="article" title="Статьи" items={articles as ContentItem[]} />
       <ContentBlock kind="product" title="Товары" items={products as ContentItem[]} />

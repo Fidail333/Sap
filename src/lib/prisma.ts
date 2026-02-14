@@ -16,6 +16,10 @@ declare global {
   var __prisma: PrismaClientLike | undefined;
 }
 
+export function resolveDatabaseUrl() {
+  return process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || '';
+}
+
 function createPrismaClient() {
   try {
     const required = eval('require')('@prisma/client') as { PrismaClient?: new (...args: any[]) => PrismaClientLike };
@@ -27,8 +31,15 @@ function createPrismaClient() {
 }
 
 export function getPrismaClient() {
-  if (!process.env.DATABASE_URL) {
+  const databaseUrl = resolveDatabaseUrl();
+
+  if (!databaseUrl) {
+    console.error('DATABASE_URL is missing (checked DATABASE_URL, POSTGRES_URL, NEON_DATABASE_URL)');
     return null;
+  }
+
+  if (!process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = databaseUrl;
   }
 
   if (process.env.NODE_ENV === 'production') {
