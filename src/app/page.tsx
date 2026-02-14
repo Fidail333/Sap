@@ -12,6 +12,7 @@ import { productsData } from '@/lib/content';
 import { getPublishedBlogEntries } from '@/lib/cms';
 import { buildMetadata, faqSchema } from '@/lib/seo';
 import { PartnersMarquee } from '@/components/sections/PartnersMarquee';
+import { WorkProcess } from '@/components/sections/WorkProcess';
 
 export const metadata: Metadata = buildMetadata('Премиальные LED-решения для бизнеса | Sapphire LED', 'LED-экраны для indoor, outdoor, rental и control rooms с инженерным сопровождением и сервисом.', '/');
 
@@ -98,8 +99,6 @@ const advantages = [
     href: '/contacts'
   }
 ];
-
-const process = ['Бриф и аудит площадки', 'Подбор серии и пилотный расчет', 'Производство, поставка, калибровка', 'Монтаж, запуск и сервис'];
 
 const faq = [
   ['Как выбрать шаг пикселя для проекта?', 'Ориентируйтесь на минимальную дистанцию просмотра, тип контента и размер экрана. Для близкой дистанции обычно выбирают более плотный шаг, для крупных фасадных поверхностей — более крупный, но с достаточной яркостью.'],
@@ -238,8 +237,9 @@ export default async function Home() {
       </Section>
 
       <Section>
-        <Reveal><h2 className="text-3xl font-semibold">Процесс работы</h2></Reveal>
-        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 lg:grid-cols-4">{process.map((item, index) => <Reveal key={item}><Card><p className="text-cyan-300">0{index + 1}</p><p className="mt-2 text-sm text-slate-300">{item}</p></Card></Reveal>)}</div>
+        <Reveal>
+          <WorkProcess />
+        </Reveal>
       </Section>
 
       <Section>
