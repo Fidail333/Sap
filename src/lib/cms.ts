@@ -24,15 +24,12 @@ function dbErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : 'Unknown DB error';
 }
 
-function getStaticBlogEntries(): BlogEntry[] {
-  return blogPosts.map((item) => ({ ...item, id: item.slug, createdAt: new Date(item.datePublished) }));
-}
 
 export async function getPublishedBlogEntries(): Promise<BlogEntry[]> {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    return getStaticBlogEntries();
+    return blogPosts.map((item) => ({ ...item, id: item.slug, createdAt: new Date(item.datePublished) }));
   }
 
   try {
@@ -47,16 +44,17 @@ export async function getPublishedBlogEntries(): Promise<BlogEntry[]> {
       ...articles.map((item) => mapContent(item, 'Статья'))
     ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-    return dbEntries.length > 0 ? dbEntries : getStaticBlogEntries();
+    return dbEntries.length > 0 ? dbEntries : blogPosts.map((item) => ({ ...item, id: item.slug, createdAt: new Date(item.datePublished) }));
   } catch (error) {
     console.error('Failed SQL: prisma.news.findMany / prisma.article.findMany', error);
-    return getStaticBlogEntries();
+    return blogPosts.map((item) => ({ ...item, id: item.slug, createdAt: new Date(item.datePublished) }));
   }
 }
 
 export async function getPublishedBlogEntryBySlug(slug: string): Promise<BlogEntry | null> {
   const prisma = getPrismaClient();
-  const staticEntry = getStaticBlogEntries().find((entry) => entry.slug === slug) ?? null;
+  const staticItem = blogPosts.find((entry) => entry.slug === slug);
+  const staticEntry = staticItem ? { ...staticItem, id: staticItem.slug, createdAt: new Date(staticItem.datePublished) } : null;
 
   if (!prisma) {
     return staticEntry;
