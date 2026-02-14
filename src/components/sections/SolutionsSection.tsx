@@ -82,8 +82,8 @@ const solutions: SolutionItem[] = [
 
 function SolutionsCard({ item }: { item: SolutionItem }) {
   const content = (
-    <Card className="group relative flex min-h-[380px] flex-col overflow-hidden border-cyan-200/20 bg-slate-900/70 p-0 transition-all duration-300 hover:scale-[1.02] hover:border-cyan-300/50 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-      <div className="relative h-44 w-full overflow-hidden">
+    <Card className="group relative flex h-full flex-col overflow-hidden border-cyan-200/20 bg-slate-900/70 p-0 transition-all duration-300 hover:scale-[1.02] hover:border-cyan-300/50 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+      <div className="relative w-full overflow-hidden aspect-[16/9]">
         <Image
           src={item.image}
           alt={item.title}
@@ -154,7 +154,7 @@ export function SolutionsSection() {
         </div>
       </Reveal>
 
-      <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 items-stretch gap-8 md:mt-8 md:grid-cols-2 xl:grid-cols-3">
         {filteredSolutions.map((item) => (
           <Reveal key={item.id} className="h-full">
             <SolutionsCard item={item} />
