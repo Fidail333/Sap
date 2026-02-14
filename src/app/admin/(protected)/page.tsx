@@ -1,9 +1,9 @@
 import { ConfirmButton } from '@/components/admin/ConfirmButton';
 import { DatabaseHealthBanner } from '@/components/admin/DatabaseHealthBanner';
-import { createContentAction, deleteContentAction, updateContentAction, updateLeadStatusAction } from '@/app/admin/(protected)/actions';
-import { getAdminContent, getLeads } from '@/lib/cms';
+import { createContentAction, deleteContentAction, updateContentAction } from '@/app/admin/(protected)/actions';
+import { getAdminContent } from '@/lib/cms';
 
-type ContentType = 'news' | 'article' | 'product';
+type ContentType = 'news' | 'article';
 type ContentItem = { id: string; title: string; slug: string; description: string; content: string; image: string; published: boolean };
 
 function ContentBlock({ kind, title, items }: { kind: ContentType; title: string; items: ContentItem[] }) {
@@ -48,7 +48,7 @@ function ContentBlock({ kind, title, items }: { kind: ContentType; title: string
 }
 
 export default async function AdminPage({ searchParams }: { searchParams?: { error?: string } }) {
-  const [news, articles, products, leads] = await Promise.all([getAdminContent('news'), getAdminContent('article'), getAdminContent('product'), getLeads()]);
+  const [news, articles] = await Promise.all([getAdminContent('news'), getAdminContent('article')]);
   const errorMessage = searchParams?.error || '';
 
   return (
@@ -61,30 +61,6 @@ export default async function AdminPage({ searchParams }: { searchParams?: { err
       <DatabaseHealthBanner />
       <ContentBlock kind="news" title="Новости" items={news as ContentItem[]} />
       <ContentBlock kind="article" title="Статьи" items={articles as ContentItem[]} />
-      <ContentBlock kind="product" title="Товары" items={products as ContentItem[]} />
-
-      <section className="mt-10">
-        <h2 className="text-2xl font-semibold">Заявки (Leads)</h2>
-        <div className="mt-4 space-y-3">
-          {leads.map((lead) => (
-            <div key={lead.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="font-medium">{lead.name} · {lead.contact}</p>
-              <p className="mt-1 text-sm text-slate-300">{lead.message}</p>
-              <p className="mt-1 text-xs text-slate-400">Источник: {lead.source} · {new Date(lead.createdAt).toLocaleString('ru-RU')}</p>
-              <form action={updateLeadStatusAction} className="mt-3 flex gap-2">
-                <input type="hidden" name="id" value={lead.id} />
-                <select name="status" defaultValue={lead.status} className="rounded-lg border border-white/20 bg-slate-900 px-3 py-2 text-sm">
-                  <option value="new">new</option>
-                  <option value="in_progress">in_progress</option>
-                  <option value="done">done</option>
-                </select>
-                <button type="submit" className="rounded-lg border border-cyan-400/40 px-3 py-2 text-sm text-cyan-300">Обновить</button>
-              </form>
-            </div>
-          ))}
-          {leads.length === 0 ? <p className="text-sm text-slate-400">Заявок пока нет.</p> : null}
-        </div>
-      </section>
     </main>
   );
 }
