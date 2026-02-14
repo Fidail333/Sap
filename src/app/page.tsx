@@ -13,41 +13,10 @@ import { getPublishedBlogEntries } from '@/lib/cms';
 import { buildMetadata, faqSchema } from '@/lib/seo';
 import { PartnersMarquee } from '@/components/sections/PartnersMarquee';
 import { WorkProcess } from '@/components/sections/WorkProcess';
+import { SolutionsSection } from '@/components/sections/SolutionsSection';
 
 export const metadata: Metadata = buildMetadata('Премиальные LED-решения для бизнеса | Sapphire LED', 'LED-экраны для indoor, outdoor, rental и control rooms с инженерным сопровождением и сервисом.', '/');
 
-const solutions = [
-  {
-    title: 'Рекламные фасады и билборды',
-    text: 'Высокая яркость и устойчивость к внешней среде для стабильной видимости контента в городском потоке.',
-    image: '/visuals/Рекламные фасады.jpg'
-  },
-  {
-    title: 'Информационные табло и диспетчерские',
-    text: 'Надёжные indoor-панели для круглосуточной работы, визуального контроля и отображения критичных данных.',
-    image: '/visuals/Информационное табло.jpg'
-  },
-  {
-    title: 'Сценические экраны и ивенты',
-    text: 'Модульные сборки с удобным монтажом для концертных площадок, презентаций и событийных форматов.',
-    image: '/visuals/Сценические экраны.jpg'
-  },
-  {
-    title: 'Спортивные объекты и арены',
-    text: 'Контрастная картинка для трибун и арен, корректная читаемость и динамичный видеоконтент.',
-    image: '/visuals/Спортивные объекты.jpg'
-  },
-  {
-    title: 'Ритейл и витрины',
-    text: 'Fine-pitch решения для брендинга, товарных акцентов и эмоциональной подачи промо в торговых пространствах.',
-    image: '/visuals/витрины.jpg'
-  },
-  {
-    title: 'Корпоративные пространства и шоурумы',
-    text: 'LED-системы для лобби, переговорных и демонстрационных зон с акцентом на стиль и детализацию.',
-    image: '/visuals/корпоративные пространства.jpg'
-  }
-];
 
 const advantages = [
   {
@@ -192,22 +161,7 @@ export default async function Home() {
       <PartnersMarquee />
 
       <Section id="solutions">
-        <Reveal><h2 className="text-3xl font-semibold">Решения</h2></Reveal>
-        <div className="mt-6 grid gap-4 md:mt-8 md:grid-cols-2 xl:grid-cols-3">
-          {solutions.map((item) => (
-            <Reveal key={item.title}>
-              <Card className="flex min-h-[340px] flex-col overflow-hidden p-0">
-                <div className="relative h-44 w-full">
-                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
-                </div>
-                <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
-                  <h3 className="break-words text-lg font-semibold leading-tight">{item.title}</h3>
-                  <p className="line-clamp-3 break-words text-sm leading-relaxed text-slate-300">{item.text}</p>
-                </div>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+        <SolutionsSection />
       </Section>
 
       <Section>
