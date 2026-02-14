@@ -87,6 +87,7 @@ function formatHistory(history: LeadHistoryItem[] | undefined) {
 }
 
 export async function POST(request: Request) {
+  try {
   const payload = (await request.json().catch(() => null)) as LeadPayload | null;
   if (!payload) {
     return NextResponse.json({ ok: false, error: 'invalid_json' }, { status: 400 });
@@ -166,4 +167,10 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ ok: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed SQL: POST /api/lead', error);
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+  }
 }
+
